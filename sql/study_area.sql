@@ -1,6 +1,8 @@
--- define study area as all watershed groups in fraser with salmon/steelhead
+-- define study area as all watershed groups in Fraser with salmon/steelhead
 -- and create a temp table holding the definition, with optimized geometry (subdivided)
 
+-- note that all Fraser is included, plus all of LFRA watershed group
+-- (streams draining to Nicomekl/Campbell/Nooksack/etc in Surrey/Aldergrove/Abbotsford are included)
 create schema if not exists temp;
 drop table if exists temp.rail_studyarea;
 

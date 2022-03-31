@@ -69,9 +69,7 @@ stream_length as
 (
   select
     watershed_group_code,
-    --coalesce(round(((sum(st_length(s.geom)) filter (where wb.waterbody_type = 'r' or (wb.waterbody_type is null and s.edge_type in (1000,1100,2000,2300)))) / 1000)::numeric, 2), 0) as total_stream_km
-    coalesce(round(((sum(st_length(s.geom)) filter (where s.edge_type in (1000,1100,2000,2300))) / 1000)::numeric, 2), 0) as stream_km,
-    coalesce(round(((sum(st_length(s.geom)) filter (where access_model_ch_co_sk is not null or access_model_st is not null)) / 1000)::numeric, 2), 0) as stream_potentially_accessible_km,
+    coalesce(round((sum(st_length(s.geom)))::numeric, 2))  as stream_km,
     coalesce(round(((sum(st_length(s.geom)) filter (where access_model_ch_co_sk is not null or access_model_st is not null)) / 1000)::numeric, 2), 0) as stream_potentially_accessible_km,
     round((sum(st_length(s.geom)) filter (where s.spawning_model_ch is true) / 1000 )::numeric, 2)  stream_ch_spawning_km,
     round((sum(st_length(s.geom)) filter (where s.rearing_model_ch is true) / 1000 )::numeric, 2) stream_ch_rearing_km,
@@ -113,7 +111,8 @@ rail_barriers as
     sk_spawning_km ,
     sk_rearing_km ,
     st_spawning_km ,
-    st_rearing_km
+    st_rearing_km,
+    all_spawningrearing_km
   from bcfishpass.crossings
   where watershed_group_code in (select distinct watershed_group_code from temp.rail_studyarea)
   and crossing_feature_type = 'RAIL'
@@ -180,7 +179,6 @@ select distinct -- distinct because the study area polys are subdivided
   x.n_dams_potentially_accessible_potential_barriers,
   sl.stream_km,
   sl.stream_potentially_accessible_km,
-  sl.stream_potentially_accessible_km,
   sl.stream_ch_spawning_km,
   sl.stream_ch_rearing_km,
   sl.stream_co_spawning_km,
@@ -198,7 +196,7 @@ select distinct -- distinct because the study area polys are subdivided
   pb.sk_rearing_km as stream_sk_rearing_aboverail_km,
   pb.st_spawning_km as stream_st_spawning_aboverail_km,
   pb.st_rearing_km as stream_st_rearing_aboverail_km,
-  pb.all_spawningrearing as stream_all_spawningrearing_aboverail_km
+  pb.all_spawningrearing_km as stream_all_spawningrearing_aboverail_km
 from temp.rail_studyarea sa
 left outer join length_rail lr on sa.watershed_group_code = lr.watershed_group_code
 left outer join count_xings x on sa.watershed_group_code = x.watershed_group_code

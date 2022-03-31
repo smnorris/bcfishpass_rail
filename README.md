@@ -11,16 +11,15 @@ With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the repor
 
 1. Generate a study area
 
-        psql $DATABASE_URL -c sql/study_area.sql
-
+        psql $DATABASE_URL -f sql/study_area.sql
 
 2. Generate summaries per watershed group within study area
 
-        psql2csv $DATABASE_URL sql/overview.sql > overview.csv
+        psql2csv $DATABASE_URL < sql/overview.sql > overview.csv
 
 3. Generate per-crossing report
 
-        psql2csv $DATABASE_URL sql/rail_crossings.sql > rail_crossings.csv
+        psql2csv $DATABASE_URL < sql/rail_crossings.sql > rail_crossings.csv
 
 4. Generate draft lateral habitat report
 
