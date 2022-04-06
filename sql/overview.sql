@@ -44,10 +44,10 @@ count_xings as
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_road_crossings_potentially_accessible_potential_barriers,
 
-    count(c.*) filter (where c.crossing_feature_type IN ('DAM','WEIR') ) as n_trail_crossings,
-    count(c.*) filter (where c.crossing_feature_type IN ('DAM','WEIR') and (c.access_model_ch_co_sk is not null or c.access_model_st is not null)) as n_trail_crossings_potentially_accessible,
+    count(c.*) filter (where c.crossing_feature_type = 'TRAIL' ) as n_trail_crossings,
+    count(c.*) filter (where c.crossing_feature_type = 'TRAIL' and (c.access_model_ch_co_sk is not null or c.access_model_st is not null)) as n_trail_crossings_potentially_accessible,
     count(c.*) filter (where
-             c.crossing_feature_type IN ('DAM','WEIR') and
+             c.crossing_feature_type = 'TRAIL' and
              (c.access_model_ch_co_sk is not null or c.access_model_st is not null) and
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_trail_crossings_potentially_accessible_potential_barriers,

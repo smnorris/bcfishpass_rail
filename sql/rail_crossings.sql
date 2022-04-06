@@ -49,6 +49,40 @@ xings_upstr as
   )
   where b.barrier_status in ('BARRIER','POTENTIAL')
   group by a.aggregated_crossings_id
+),
+
+hab_dnstr as
+(
+  select
+    a.aggregated_crossings_id,
+    sum(b.ch_co_sk_belowupstrbarriers_network_km) as ch_co_sk_network_km_dnstr,
+    sum(b.st_belowupstrbarriers_network_km) as st_network_km_dnstr,
+    sum(b.ch_spawning_belowupstrbarriers_km) as ch_spawning_km_dnstr,
+    sum(b.ch_rearing_belowupstrbarriers_km) as ch_rearing_km_dnstr,
+    sum(b.co_spawning_belowupstrbarriers_km) as co_spawning_km_dnstr,
+    sum(b.co_rearing_belowupstrbarriers_km) as co_rearing_km_dnstr,
+    sum(b.sk_spawning_belowupstrbarriers_km) as sk_spawning_km_dnstr,
+    sum(b.sk_rearing_belowupstrbarriers_km) as sk_rearing_km_dnstr,
+    sum(b.st_spawning_belowupstrbarriers_km) as st_spawning_km_dnstr,
+    sum(b.st_rearing_belowupstrbarriers_km) as st_rearing_km_dnstr,
+    sum(b.all_spawningrearing_belowupstrbarriers_km) as all_spawningrearing_km_dnstr
+  from xings a
+  inner join bcfishpass.crossings b
+  on FWA_Downstream(
+      a.blue_line_key,
+      a.downstream_route_measure,
+      a.wscode_ltree,
+      a.localcode_ltree,
+      b.blue_line_key,
+      b.downstream_route_measure,
+      b.wscode_ltree,
+      b.localcode_ltree,
+      false,
+      1
+     )
+  where b.barrier_status in ('BARRIER','POTENTIAL')
+  and b.blue_line_key = b.watershed_key
+  group by a.aggregated_crossings_id
 )
 
 select
@@ -81,10 +115,23 @@ select
   a.st_spawning_km,
   a.st_rearing_km,
   a.all_spawningrearing_km,
-  a.all_spawningrearing_belowupstrbarriers_km
+  a.all_spawningrearing_belowupstrbarriers_km,
+  c.ch_co_sk_network_km_dnstr,
+  c.st_network_km_dnstr,
+  c.ch_spawning_km_dnstr,
+  c.ch_rearing_km_dnstr,
+  c.co_spawning_km_dnstr,
+  c.co_rearing_km_dnstr,
+  c.sk_spawning_km_dnstr,
+  c.sk_rearing_km_dnstr,
+  c.st_spawning_km_dnstr,
+  c.st_rearing_km_dnstr,
+  c.all_spawningrearing_km_dnstr
 from xings a
 left outer join xings_upstr b
 on a.aggregated_crossings_id = b.aggregated_crossings_id
+left outer join hab_dnstr c
+on a.aggregated_crossings_id = c.aggregated_crossings_id
 left outer join whse_basemapping.fwa_stream_order_parent po
 on a.blue_line_key = po.blue_line_key
 inner join bcfishpass.streams s

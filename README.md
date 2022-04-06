@@ -21,26 +21,11 @@ With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the repor
 
         psql2csv $DATABASE_URL < sql/rail_crossings.sql > rail_crossings.csv
 
-4. Generate draft lateral habitat report
+4. Generate data for `Output 1` table, per watershed group, and total for study area:
+
+        psql2csv $DATABASE_URL < sql/output1.sql > output1.csv
+        psql2csv $DATABASE_URL < sql/output1_studyarea.sql > output1_studyarea.csv
+
+5. Generate draft lateral habitat report
 
         psql2csv $DATABASE_URL sql/rail_lateral.sql > rail_lateral.csv
-
-
-## General reporting metrics
-
-- total length of railway
-- total number of rail crossings
-- total number of rail crossings modelled as potential barriers
-- total number of rail crossings modelled as potential barriers on potentially accessible CH/CO/SK/ST streams and potential spawning/rearing streams
-- length of potential rearing/spawning stream for CH/CO/SK/ST above potential rail barriers
-- length of potential rearing/spawning stream for CH/CO/SK/ST above potential barriers but below other potential/known anthropogenic barriers
-- length of potential rearing/spawning stream for CH/CO/SK/ST below rail barriers but above other known/potential anthropogenic barriers
-- number of road crossings upstream of rail crossings (total and per barrier)
-- number of road crossings downstream of rail crossings (total and per barrier)
-- area and percentage of potential lateral habitat modelled as disconnected
-
-
-
-
-
-

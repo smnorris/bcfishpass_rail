@@ -1,0 +1,34 @@
+column,description
+length_rail_km,length of rail track
+n_rail_crossings,total number of rail crossings
+n_rail_crossings_potentially_accessible,number of rail crossings on streams potentially accessible to target species
+n_rail_crossings_potentially_accessible_potential_barriers,number of rail barriers/potential barriers on streams potentially accessible to target species
+n_road_crossings,total number of road crossings
+n_road_crossings_potentially_accessible,number of road crossings on streams potentially accessible to target species
+n_road_crossings_potentially_accessible_potential_barriers,number of road barriers/potential barriers on streams potentially accessible to target species
+n_trail_crossings,total number of trail crossings
+n_trail_crossings_potentially_accessible,number of trail crossings on streams potentially accessible to target species
+n_trail_crossings_potentially_accessible_potential_barriers,number of trail barriers/potential barriers on streams potentially accessible to target species
+n_dams,total number of dams
+n_dams_potentially_accessible,number of dams on streams potentially accessible to target species
+n_dams_potentially_accessible_potential_barriers,number of trail dam barriers on streams potentially accessible to target species
+stream_km,total length of stream network
+stream_potentially_accessible_km,total length of stream network potentially accessible to target species
+stream_ch_spawning_km,length of potential chinook spawning stream
+stream_ch_rearing_km,length of potential chinook rearning stream
+stream_co_spawning_km,length of potential coho spawning stream
+stream_co_rearing_km,length of potential coho rearning stream
+stream_sk_spawning_km,length of potential sockeye spawning stream
+stream_sk_rearing_km,length of potential sockeye rearning stream
+stream_st_spawning_km,length of potential steelhead spawning stream
+stream_st_rearing_km,length of potential steelhead rearning stream
+stream_all_spawningrearing_km,length of all stream with potential for CH/CO/SK/ST spawning and/or rearing
+stream_ch_spawning_aboverail_km,length of potential chinook spawning stream above rail barriers/potential barriers
+stream_ch_rearing_aboverail_km,length of potential chinook rearning stream above rail barriers/potential barriers
+stream_co_spawning_aboverail_km,length of potential coho spawning stream above rail barriers/potential barriers
+stream_co_rearing_aboverail_km,length of potential coho rearning stream above rail barriers/potential barriers
+stream_sk_spawning_aboverail_km,length of potential sockeye spawning stream above rail barriers/potential barriers
+stream_sk_rearing_aboverail_km,length of potential sockeye rearning stream above rail barriers/potential barriers
+stream_st_spawning_aboverail_km,length of potential steelhead spawning stream above rail barriers/potential barriers
+stream_st_rearing_aboverail_km,length of potential steelhead rearning stream above rail barriers/potential barriers
+stream_all_spawningrearing_aboverail_km,length of all stream with potential for CH/CO/SK/ST spawning and/or rearing above rail barriers/potential barriers
