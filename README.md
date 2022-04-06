@@ -21,7 +21,7 @@ With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the repor
 
         psql2csv $DATABASE_URL < sql/rail_crossings.sql > rail_crossings.csv
 
-4. Generate data for `Output 1` table, per watershed group, and total for study area:
+4. Sumarize length modelled habitat in the study area, and the length/pct potentially inaccessible due to rail barriers (first query summarizes per watershed group, second is total for the entire study area)
 
         psql2csv $DATABASE_URL < sql/output1.sql > output1.csv
         psql2csv $DATABASE_URL < sql/output1_studyarea.sql > output1_studyarea.csv
