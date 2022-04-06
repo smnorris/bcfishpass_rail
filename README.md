@@ -17,7 +17,7 @@ With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the repor
 
         psql2csv $DATABASE_URL < sql/overview.sql > overview.csv
 
-3. Generate per-crossing report, , columns are described in `rail_crossings_columns.csv`
+3. Generate per-crossing report, columns are described in `rail_crossings_columns.csv`
 
         psql2csv $DATABASE_URL < sql/rail_crossings.sql > rail_crossings.csv
 
