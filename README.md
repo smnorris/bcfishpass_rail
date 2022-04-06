@@ -3,7 +3,7 @@
 A sample collection of queries for `bcfishpass` reporting:
 
 - report on modelled impacts of railways to habitat connectivity for salmon (Chinook, Coho, Steelhead) and Steelhead in the Fraser basin
-- for the most part, reporting be adjusted to accomodate any supported feature type (eg, roads, dams), species, or area of interest
+- for the most part, queries can be adjusted to accomodate any supported feature type (eg, roads, dams), species, or area of interest
 
 ## Running the reports
 
