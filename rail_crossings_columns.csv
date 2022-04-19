@@ -5,12 +5,14 @@ modelled_crossing_id,
 stream_crossing_id,PSCIS crossing id
 barrier_status,
 pscis_status,
+pscis_road_name,Name of road/railway according to PSCIS assessment
 rail_track_name,
 rail_operator_english_name,
 pscis_stream_name,name taken from PSCIS assessment
 gnis_stream_name,official stream name
 stream_order,
 stream_order_parent,stream_order of stream to which the stream associated with the crossing drains
+rail_barriers_dnstr,aggregated_crossings_id value of downstream rail crossings that are potential barriers (ie, other records in this table)
 barriers_anthropogenic_dnstr_count,count of anthropogenic barriers/potential barriers downstream of crossing
 barriers_anthropogenic_upstr_count,count of anthropogenic barriers/potential barriers upstream of crossing (total)
 barriers_anthropogenic_upstr_accessible_count,count of anthropogenic barriers/potential barriers upstream of crossing (on stream potentially accessible to target species)

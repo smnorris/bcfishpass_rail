@@ -13,6 +13,29 @@ with xings as
     and (access_model_ch_co_sk is not null or access_model_st is not null)
 ),
 
+-- list other rail crossings dnstr
+rail_barriers_dnstr as
+(
+  select
+    a.aggregated_crossings_id,
+    array_agg(b.aggregated_crossings_id) as rail_barriers_dnstr
+  from xings a
+  inner join xings b
+  on FWA_Downstream(
+      a.blue_line_key,
+      a.downstream_route_measure,
+      a.wscode_ltree,
+      a.localcode_ltree,
+      b.blue_line_key,
+      b.downstream_route_measure,
+      b.wscode_ltree,
+      b.localcode_ltree,
+      false,
+      1
+    )
+  group by a.aggregated_crossings_id
+),
+
 -- find crossings upstream on potentially accessible streams
 -- (this is not currently in the crossings table, should be added)
 xings_upstr as
@@ -92,12 +115,14 @@ select
   a.stream_crossing_id,
   a.barrier_status,
   a.pscis_status,
+  a.pscis_road_name,
   a.rail_track_name,
   a.rail_operator_english_name,
   a.pscis_stream_name,
   a.gnis_stream_name,
   a.stream_order,
   po.stream_order_parent,
+  d.rail_barriers_dnstr,
   a.barriers_anthropogenic_dnstr_count,
   a.barriers_anthropogenic_upstr_count,
   coalesce(b.barriers_anthropogenic_upstr_accessible_count, 0) as barriers_anthropogenic_upstr_accessible_count,
@@ -132,6 +157,8 @@ left outer join xings_upstr b
 on a.aggregated_crossings_id = b.aggregated_crossings_id
 left outer join hab_dnstr c
 on a.aggregated_crossings_id = c.aggregated_crossings_id
+left outer join rail_barriers_dnstr d
+on a.aggregated_crossings_id = d.aggregated_crossings_id
 left outer join whse_basemapping.fwa_stream_order_parent po
 on a.blue_line_key = po.blue_line_key
 inner join bcfishpass.streams s

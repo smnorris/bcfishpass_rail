@@ -5,6 +5,19 @@ A sample collection of queries for `bcfishpass` reporting:
 - report on modelled impacts of railways to habitat connectivity for salmon (Chinook, Coho, Steelhead) and Steelhead in the Fraser basin
 - for the most part, queries can be adjusted to accomodate any supported feature type (eg, roads, dams), species, or area of interest
 
+## Prep data
+
+Load exclusion area (we exclude everything downstream of Aggasiz)
+    
+    ogr2ogr -f PostgreSQL $DATABASE_URL \
+    -lco OVERWRITE=YES \
+    -t_srs EPSG:3005 \
+    -lco SCHEMA=temp \
+    -lco GEOMETRY_NAME=geom \
+    -nln lateral_exclusion \
+    -nlt PROMOTE_TO_MULTI \
+    data/lateral_exclusion.shp
+
 ## Running the reports
 
 With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the report is a collection of queries:
@@ -28,4 +41,9 @@ With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the repor
 
 5. Generate draft lateral habitat report
 
-        psql2csv $DATABASE_URL sql/rail_lateral.sql > rail_lateral.csv
+        psql $DATABASE_URL -f sql/lateral_potential_fraser.sql 
+        psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from temp.lateral_potential_fraser"
+        psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from temp.lateral_disconnected_fraser"
+        psql $DATABASE_URL -c "select count(*) from temp.lateral_disconnected_fraser"
+        psql $DATABASE_URL -c "select avg(st_area(geom) / 10000) from temp.lateral_disconnected_fraser"
+        psql2csv $DATABASE_URL < sql/lateral_by_wsg.sql > lateral_area_by_wsg.csv
