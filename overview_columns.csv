@@ -16,17 +16,21 @@ stream_km,total length of stream network
 stream_potentially_accessible_km,total length of stream network potentially accessible to target species
 stream_ch_spawning_km,length of potential chinook spawning stream
 stream_ch_rearing_km,length of potential chinook rearning stream
+stream_cm_spawning_km,length of potential chum spawning stream
 stream_co_spawning_km,length of potential coho spawning stream
 stream_co_rearing_km,length of potential coho rearning stream
+stream_pk_spawning_km,length of potential pink spawning stream
 stream_sk_spawning_km,length of potential sockeye spawning stream
 stream_sk_rearing_km,length of potential sockeye rearning stream
 stream_st_spawning_km,length of potential steelhead spawning stream
 stream_st_rearing_km,length of potential steelhead rearning stream
-stream_all_spawningrearing_km,length of all stream with potential for CH/CO/SK/ST spawning and/or rearing
+stream_all_spawningrearing_km,length of all stream with potential for CH/CM/CO/PK/SK/ST spawning and/or rearing
 stream_ch_spawning_aboverail_km,length of potential chinook spawning stream above rail barriers/potential barriers
 stream_ch_rearing_aboverail_km,length of potential chinook rearning stream above rail barriers/potential barriers
+stream_cm_spawning_aboverail_km,length of potential chum spawning stream above rail barriers/potential barriers
 stream_co_spawning_aboverail_km,length of potential coho spawning stream above rail barriers/potential barriers
 stream_co_rearing_aboverail_km,length of potential coho rearning stream above rail barriers/potential barriers
+stream_pk_spawning_aboverail_km,length of potential pink spawning stream above rail barriers/potential barriers
 stream_sk_spawning_aboverail_km,length of potential sockeye spawning stream above rail barriers/potential barriers
 stream_sk_rearing_aboverail_km,length of potential sockeye rearning stream above rail barriers/potential barriers
 stream_st_spawning_aboverail_km,length of potential steelhead spawning stream above rail barriers/potential barriers

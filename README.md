@@ -2,12 +2,12 @@
 
 A sample collection of queries for `bcfishpass` reporting:
 
-- report on modelled impacts of railways to habitat connectivity for salmon (Chinook, Coho, Steelhead) and Steelhead in the Fraser basin
+- report on modelled impacts of railways to habitat connectivity for Pacific Salmon (Chinook, Chum, Coho, Pink, Sockeye) and Steelhead
 - for the most part, queries can be adjusted to accomodate any supported feature type (eg, roads, dams), species, or area of interest
 
 ## Prep data
 
-Load exclusion area (we exclude everything downstream of Agassiz)
+Load exclusion area (for lateral analysis, we exclude the Fraser Valley downstream of Agassiz)
     
     ogr2ogr -f PostgreSQL $DATABASE_URL \
     -lco OVERWRITE=YES \

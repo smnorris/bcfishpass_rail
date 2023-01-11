@@ -29,34 +29,34 @@ count_xings as
   select
     sa.watershed_group_code,
     count(c.*) filter (where c.crossing_feature_type = 'RAIL' ) as n_rail_crossings,
-    count(c.*) filter (where c.crossing_feature_type = 'RAIL' and (c.access_model_ch_co_sk is not null or c.access_model_st is not null)) as n_rail_crossings_potentially_accessible,
+    count(c.*) filter (where c.crossing_feature_type = 'RAIL' and (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[])) as n_rail_crossings_potentially_accessible,
     count(c.*) filter (where
              c.crossing_feature_type = 'RAIL' and
-             (c.access_model_ch_co_sk is not null or c.access_model_st is not null) and
+             (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[]) and
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_rail_crossings_potentially_accessible_potential_barriers,
 
     count(c.*) filter (where c.crossing_feature_type like 'ROAD%' ) as n_road_crossings,
-    count(c.*) filter (where c.crossing_feature_type like 'ROAD%' and (c.access_model_ch_co_sk is not null or c.access_model_st is not null)) as n_road_crossings_potentially_accessible,
+    count(c.*) filter (where c.crossing_feature_type like 'ROAD%' and (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[])) as n_road_crossings_potentially_accessible,
     count(c.*) filter (where
              c.crossing_feature_type like 'ROAD%' and
-             (c.access_model_ch_co_sk is not null or c.access_model_st is not null) and
+             (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[]) and
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_road_crossings_potentially_accessible_potential_barriers,
 
     count(c.*) filter (where c.crossing_feature_type = 'TRAIL' ) as n_trail_crossings,
-    count(c.*) filter (where c.crossing_feature_type = 'TRAIL' and (c.access_model_ch_co_sk is not null or c.access_model_st is not null)) as n_trail_crossings_potentially_accessible,
+    count(c.*) filter (where c.crossing_feature_type = 'TRAIL' and (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[])) as n_trail_crossings_potentially_accessible,
     count(c.*) filter (where
              c.crossing_feature_type = 'TRAIL' and
-             (c.access_model_ch_co_sk is not null or c.access_model_st is not null) and
+             (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[]) and
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_trail_crossings_potentially_accessible_potential_barriers,
 
     count(c.*) filter (where c.crossing_feature_type IN ('DAM','WEIR') ) as n_dams,
-    count(c.*) filter (where c.crossing_feature_type IN ('DAM','WEIR') and (c.access_model_ch_co_sk is not null or c.access_model_st is not null)) as n_dams_potentially_accessible,
+    count(c.*) filter (where c.crossing_feature_type IN ('DAM','WEIR') and (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[])) as n_dams_potentially_accessible,
     count(c.*) filter (where
              c.crossing_feature_type IN ('DAM','WEIR') and
-             (c.access_model_ch_co_sk is not null or c.access_model_st is not null) and
+             (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[]) and
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_dams_potentially_accessible_potential_barriers
   from temp.rail_studyarea sa
@@ -70,23 +70,27 @@ stream_length as
   select
     watershed_group_code,
     coalesce(round((sum(st_length(s.geom)))::numeric, 2))  as stream_km,
-    coalesce(round(((sum(st_length(s.geom)) filter (where access_model_ch_co_sk is not null or access_model_st is not null)) / 1000)::numeric, 2), 0) as stream_potentially_accessible_km,
-    round((sum(st_length(s.geom)) filter (where s.spawning_model_ch is true) / 1000 )::numeric, 2)  stream_ch_spawning_km,
-    round((sum(st_length(s.geom)) filter (where s.rearing_model_ch is true) / 1000 )::numeric, 2) stream_ch_rearing_km,
-    round((sum(st_length(s.geom)) filter (where s.spawning_model_co is true) / 1000)::numeric, 2)  stream_co_spawning_km,
-    round((sum(st_length(s.geom)) filter (where s.rearing_model_co is true) / 1000)::numeric, 2) stream_co_rearing_km,
-    round((sum(st_length(s.geom)) filter (where s.spawning_model_sk is true) / 1000)::numeric, 2)  stream_sk_spawning_km,
-    round((sum(st_length(s.geom)) filter (where s.rearing_model_sk is true) / 1000)::numeric, 2) stream_sk_rearing_km,
-    round((sum(st_length(s.geom)) filter (where s.spawning_model_st is true) / 1000)::numeric, 2)  stream_st_spawning_km,
-    round((sum(st_length(s.geom)) filter (where s.rearing_model_st is true) / 1000)::numeric, 2) stream_st_rearing_km,
-    coalesce(round(((sum(st_length(s.geom)) filter (where s.spawning_model_ch is true or
-                                                        s.spawning_model_co is true or
-                                                        s.spawning_model_sk is true or
-                                                        s.spawning_model_st is true or
-                                                        s.rearing_model_ch is true or
-                                                        s.rearing_model_co is true or
-                                                        s.rearing_model_sk is true or
-                                                        s.rearing_model_st is true
+    coalesce(round(((sum(st_length(s.geom)) filter (where barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or barriers_st_dnstr = array[]::text[])) / 1000)::numeric, 2), 0) as stream_potentially_accessible_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_ch is true) / 1000 )::numeric, 2)  stream_ch_spawning_km,
+    round((sum(st_length(s.geom)) filter (where s.model_rearing_ch is true) / 1000 )::numeric, 2) stream_ch_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_cm is true) / 1000 )::numeric, 2) stream_cm_spawning_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_co is true) / 1000)::numeric, 2)  stream_co_spawning_km,
+    round((sum(st_length(s.geom)) filter (where s.model_rearing_co is true) / 1000)::numeric, 2) stream_co_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_pk is true) / 1000 )::numeric, 2) stream_pk_spawning_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_sk is true) / 1000)::numeric, 2)  stream_sk_spawning_km,
+    round((sum(st_length(s.geom)) filter (where s.model_rearing_sk is true) / 1000)::numeric, 2) stream_sk_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_st is true) / 1000)::numeric, 2)  stream_st_spawning_km,
+    round((sum(st_length(s.geom)) filter (where s.model_rearing_st is true) / 1000)::numeric, 2) stream_st_rearing_km,
+    coalesce(round(((sum(st_length(s.geom)) filter (where s.model_spawning_ch is true or
+                                                        s.model_spawning_cm is true or
+                                                        s.model_spawning_co is true or
+                                                        s.model_spawning_pk is true or
+                                                        s.model_spawning_sk is true or
+                                                        s.model_spawning_st is true or
+                                                        s.model_rearing_ch is true or
+                                                        s.model_rearing_co is true or
+                                                        s.model_rearing_sk is true or
+                                                        s.model_rearing_st is true
                                                   )) / 1000)::numeric, 2), 0) as stream_all_spawningrearing_km
     from bcfishpass.streams s
     left outer join whse_basemapping.fwa_waterbodies wb on s.waterbody_key = wb.waterbody_key
@@ -106,8 +110,10 @@ rail_barriers as
     localcode_ltree,
     ch_spawning_km ,
     ch_rearing_km ,
+    cm_spawning_km ,
     co_spawning_km ,
     co_rearing_km ,
+    pk_spawning_km ,
     sk_spawning_km ,
     sk_rearing_km ,
     st_spawning_km ,
@@ -124,8 +130,10 @@ potentially_blocked as (
     a.watershed_group_code,
     round((sum(a.ch_spawning_km))::numeric, 2) as ch_spawning_km,
     round((sum(a.ch_rearing_km))::numeric, 2) as ch_rearing_km,
+    round((sum(a.cm_spawning_km))::numeric, 2) as cm_spawning_km,
     round((sum(a.co_spawning_km))::numeric, 2) as co_spawning_km,
     round((sum(a.co_rearing_km))::numeric, 2) as co_rearing_km,
+    round((sum(a.pk_spawning_km))::numeric, 2) as pk_spawning_km,
     round((sum(a.sk_spawning_km))::numeric, 2) as sk_spawning_km,
     round((sum(a.sk_rearing_km))::numeric, 2) as sk_rearing_km,
     round((sum(a.st_spawning_km))::numeric, 2) as st_spawning_km,
@@ -149,8 +157,10 @@ potentially_blocked as (
   where (
     a.ch_spawning_km  > 0 or
     a.ch_rearing_km  > 0 or
+    a.cm_spawning_km  > 0 or
     a.co_spawning_km  > 0 or
     a.co_rearing_km  > 0 or
+    a.pk_spawning_km  > 0 or
     a.sk_spawning_km  > 0 or
     a.sk_rearing_km  > 0 or
     a.st_spawning_km  > 0 or
@@ -181,8 +191,10 @@ select distinct -- distinct because the study area polys are subdivided
   sl.stream_potentially_accessible_km,
   sl.stream_ch_spawning_km,
   sl.stream_ch_rearing_km,
+  sl.stream_cm_spawning_km,
   sl.stream_co_spawning_km,
   sl.stream_co_rearing_km,
+  sl.stream_pk_spawning_km,
   sl.stream_sk_spawning_km,
   sl.stream_sk_rearing_km,
   sl.stream_st_spawning_km,
@@ -190,8 +202,10 @@ select distinct -- distinct because the study area polys are subdivided
   sl.stream_all_spawningrearing_km,
   pb.ch_spawning_km as stream_ch_spawning_aboverail_km,
   pb.ch_rearing_km as stream_ch_rearing_aboverail_km,
+  pb.cm_spawning_km as stream_cm_spawning_aboverail_km,
   pb.co_spawning_km as stream_co_spawning_aboverail_km,
   pb.co_rearing_km as stream_co_rearing_aboverail_km,
+  pb.pk_spawning_km as stream_pk_spawning_aboverail_km,
   pb.sk_spawning_km as stream_sk_spawning_aboverail_km,
   pb.sk_rearing_km as stream_sk_rearing_aboverail_km,
   pb.st_spawning_km as stream_st_spawning_aboverail_km,

@@ -3,14 +3,15 @@
 with xings as
 (
   select *
-  from bcfishpass.crossings
+ 
+  from \d bcfishpass.crossings
   where
     watershed_group_code in (
       select distinct watershed_group_code from temp.rail_studyarea
     )
     and crossing_feature_type = 'RAIL'
     and barrier_status in ('BARRIER', 'POTENTIAL')
-    and (access_model_ch_co_sk is not null or access_model_st is not null)
+    and (barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or barriers_st_dnstr = array[]::text[] )
 ),
 
 -- list other rail crossings dnstr
@@ -18,7 +19,8 @@ rail_barriers_dnstr as
 (
   select
     a.aggregated_crossings_id,
-    array_agg(b.aggregated_crossings_id) as rail_barriers_dnstr
+    array_agg(b.aggregated_crossings_id) as rail_barriers_dnstr,
+    array_length(array_agg(b.aggregated_crossings_id), 1) as rail_barriers_dnstr_count
   from xings a
   inner join xings b
   on FWA_Downstream(
@@ -43,19 +45,34 @@ xings_upstr as
   select
     a.aggregated_crossings_id,
     count(b.aggregated_crossings_id) filter (
-      where b.access_model_ch_co_sk is not null or b.access_model_st is not null
+      where b.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or b.barriers_st_dnstr = array[]::text[] 
       ) as barriers_anthropogenic_upstr_accessible_count,
     count(b.aggregated_crossings_id) filter (
       where
         b.ch_spawning_km > 0 or
         b.ch_rearing_km > 0 or
+        b.cm_spawning_km > 0 or
         b.co_spawning_km > 0 or
         b.co_rearing_km > 0 or
+        b.pk_spawning_km > 0 or
         b.sk_spawning_km > 0 or
         b.sk_rearing_km > 0 or
         b.st_spawning_km > 0 or
         b.st_rearing_km > 0
-      ) as barriers_anthropogenic_upstr_spawningrearing_count
+      ) as barriers_anthropogenic_upstr_spawningrearing_count,
+    count(b.aggregated_crossings_id) filter (
+      where b.crossing_feature_type = 'RAIL' and
+        (b.ch_spawning_km > 0 or
+        b.ch_rearing_km > 0 or
+        b.cm_spawning_km > 0 or
+        b.co_spawning_km > 0 or
+        b.co_rearing_km > 0 or
+        b.pk_spawning_km > 0 or
+        b.sk_spawning_km > 0 or
+        b.sk_rearing_km > 0 or
+        b.st_spawning_km > 0 or
+        b.st_rearing_km > 0)
+      ) as barriers_anthropogenic_upstr_spawningrearing_rail_count
   from xings a
   inner join bcfishpass.crossings b
   on fwa_upstream(
@@ -80,10 +97,12 @@ hab_dnstr as
     a.aggregated_crossings_id,
     sum(b.ch_co_sk_belowupstrbarriers_network_km) as ch_co_sk_network_km_dnstr,
     sum(b.st_belowupstrbarriers_network_km) as st_network_km_dnstr,
+    sum(b.cm_spawning_belowupstrbarriers_km) as cm_spawning_km_dnstr,
     sum(b.ch_spawning_belowupstrbarriers_km) as ch_spawning_km_dnstr,
     sum(b.ch_rearing_belowupstrbarriers_km) as ch_rearing_km_dnstr,
     sum(b.co_spawning_belowupstrbarriers_km) as co_spawning_km_dnstr,
     sum(b.co_rearing_belowupstrbarriers_km) as co_rearing_km_dnstr,
+    sum(b.pk_spawning_belowupstrbarriers_km) as pk_spawning_km_dnstr,
     sum(b.sk_spawning_belowupstrbarriers_km) as sk_spawning_km_dnstr,
     sum(b.sk_rearing_belowupstrbarriers_km) as sk_rearing_km_dnstr,
     sum(b.st_spawning_belowupstrbarriers_km) as st_spawning_km_dnstr,
@@ -123,30 +142,36 @@ select
   a.stream_order,
   po.stream_order_parent,
   d.rail_barriers_dnstr,
+  d.rail_barriers_dnstr_count,
   a.barriers_anthropogenic_dnstr_count,
   a.barriers_anthropogenic_upstr_count,
   coalesce(b.barriers_anthropogenic_upstr_accessible_count, 0) as barriers_anthropogenic_upstr_accessible_count,
   coalesce(b.barriers_anthropogenic_upstr_spawningrearing_count, 0) as barriers_anthropogenic_upstr_spawningrearing_count,
-  a.access_model_ch_co_sk,
-  a.ch_co_sk_network_km,
-  a.access_model_st,
+  coalesce(b.barriers_anthropogenic_upstr_spawningrearing_rail_count, 0) as barriers_anthropogenic_upstr_spawningrearing_rail_count,
+  a.barriers_ch_cm_co_pk_sk_dnstr,
+  a.ch_cm_co_pk_sk_network_km,
+  a.barriers_st_dnstr,
   a.st_network_km,
   a.ch_spawning_km,
   a.ch_rearing_km,
+  a.cm_spawning_km,
   a.co_spawning_km,
   a.co_rearing_km,
+  a.pk_spawning_km,
   a.sk_spawning_km,
   a.sk_rearing_km,
   a.st_spawning_km,
   a.st_rearing_km,
   a.all_spawningrearing_km,
   a.all_spawningrearing_belowupstrbarriers_km,
-  c.ch_co_sk_network_km_dnstr,
+  c.ch_cm_co_pk_sk_network_km_dnstr,
   c.st_network_km_dnstr,
   c.ch_spawning_km_dnstr,
   c.ch_rearing_km_dnstr,
+  c.cm_spawning_km_dnstr,
   c.co_spawning_km_dnstr,
   c.co_rearing_km_dnstr,
+  c.pk_spawning_km_dnstr,
   c.sk_spawning_km_dnstr,
   c.sk_rearing_km_dnstr,
   c.st_spawning_km_dnstr,

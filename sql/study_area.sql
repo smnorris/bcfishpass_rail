@@ -1,28 +1,32 @@
--- define study area as all watershed groups in Fraser with salmon/steelhead
--- and create a temp table holding the definition, with optimized geometry (subdivided)
+-- define study area as all watershed groups with salmon/steelhead and railways
+-- create a temp table holding the definition, with optimized geometry (subdivided)
 
--- note that all Fraser is included, plus all of LFRA watershed group
--- (streams draining to Nicomekl/Campbell/Nooksack/etc in Surrey/Aldergrove/Abbotsford are included)
 create schema if not exists temp;
 drop table if exists temp.rail_studyarea;
 
 create table temp.rail_studyarea as
 with studyarea as (
   select distinct
-    watershed_group_code
-  from bcfishpass.streams
+    w.watershed_group_code,
+    w.geom
+  from bcfishpass.wsg_species_presence s
+  inner join whse_basemapping.fwa_watershed_groups_poly w
+  on s.watershed_group_code = w.watershed_group_code
+  inner join whse_basemapping.gba_railway_tracks_sp r
+  on st_intersects(w.geom, r.geom)
   where 
-    (wscode_ltree <@ '100'::ltree or watershed_group_code = 'LFRA') and
-    (access_model_ch_co_sk is not null or access_model_st is not null)  
-  order by watershed_group_code
+    s.ch is not null or
+    s.cm is not null or
+    s.co is not null or
+    s.pk is not null or
+    s.sk is not null or 
+    s.st is not null
 )
+
 select 
-  row_number() over() as id, * 
-from (
-  select a.watershed_group_code, st_subdivide(a.geom) as geom
-  from whse_basemapping.fwa_watershed_groups_poly a
-  inner join studyarea b
-  on a.watershed_group_code = b.watershed_group_code
-) as f;
+  row_number() over() as id,
+  watershed_group_code,
+  st_subdivide(geom) as geom
+from studyarea;
 
 create index on temp.rail_studyarea using gist (geom);
