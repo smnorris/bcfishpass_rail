@@ -7,7 +7,7 @@ A sample collection of queries for `bcfishpass` reporting:
 
 ## Prep data
 
-Load exclusion area (we exclude everything downstream of Aggasiz)
+Load exclusion area (we exclude everything downstream of Agasiz)
     
     ogr2ogr -f PostgreSQL $DATABASE_URL \
     -lco OVERWRITE=YES \
@@ -47,3 +47,7 @@ With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the repor
         psql $DATABASE_URL -c "select count(*) from temp.lateral_disconnected_fraser"
         psql $DATABASE_URL -c "select avg(st_area(geom) / 10000) from temp.lateral_disconnected_fraser"
         psql2csv $DATABASE_URL < sql/lateral_by_wsg.sql > lateral_area_by_wsg.csv
+
+6. Generate restoration scenarios for rail barriers with up to 4 additional crossings
+
+        psql2csv $DATABASE_URL < sql/sets_of_five.sql > rail_sets_of_five.csv
