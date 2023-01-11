@@ -7,7 +7,7 @@ A sample collection of queries for `bcfishpass` reporting:
 
 ## Prep data
 
-Load exclusion area (we exclude everything downstream of Agasiz)
+Load exclusion area (we exclude everything downstream of Agassiz)
     
     ogr2ogr -f PostgreSQL $DATABASE_URL \
     -lco OVERWRITE=YES \
