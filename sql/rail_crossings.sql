@@ -4,7 +4,7 @@ with xings as
 (
   select *
  
-  from \d bcfishpass.crossings
+  from bcfishpass.crossings
   where
     watershed_group_code in (
       select distinct watershed_group_code from temp.rail_studyarea
@@ -95,7 +95,7 @@ hab_dnstr as
 (
   select
     a.aggregated_crossings_id,
-    sum(b.ch_co_sk_belowupstrbarriers_network_km) as ch_co_sk_network_km_dnstr,
+    sum(b.ch_cm_co_pk_sk_belowupstrbarriers_network_km) as ch_cm_co_pk_sk_network_km_dnstr,
     sum(b.st_belowupstrbarriers_network_km) as st_network_km_dnstr,
     sum(b.cm_spawning_belowupstrbarriers_km) as cm_spawning_km_dnstr,
     sum(b.ch_spawning_belowupstrbarriers_km) as ch_spawning_km_dnstr,
@@ -140,7 +140,7 @@ select
   a.pscis_stream_name,
   a.gnis_stream_name,
   a.stream_order,
-  po.stream_order_parent,
+  s.stream_order_parent,
   d.rail_barriers_dnstr,
   d.rail_barriers_dnstr_count,
   a.barriers_anthropogenic_dnstr_count,
@@ -184,8 +184,6 @@ left outer join hab_dnstr c
 on a.aggregated_crossings_id = c.aggregated_crossings_id
 left outer join rail_barriers_dnstr d
 on a.aggregated_crossings_id = d.aggregated_crossings_id
-left outer join whse_basemapping.fwa_stream_order_parent po
-on a.blue_line_key = po.blue_line_key
 inner join bcfishpass.streams s
 on a.linear_feature_id = s.linear_feature_id
   and a.downstream_route_measure > (s.downstream_route_measure - .001)

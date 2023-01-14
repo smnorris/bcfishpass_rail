@@ -1,30 +1,51 @@
-with studyarea as 
-( select distinct
-  watershed_group_code
-  from bcfishpass.crossings 
+with studyarea as (
+  select watershed_group_code
+  from bcfishpass.wsg_species_presence s
   where 
-    crossing_feature_type = 'RAIL' and 
-    (wscode_ltree <@ '100'::ltree or watershed_group_code = 'LFRA') and
-    (barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or barriers_st_dnstr array[]::text[])  
+    s.ch is not null or
+    s.cm is not null or
+    s.co is not null or
+    s.pk is not null or
+    s.sk is not null or 
+    s.st is not null
+),
+
+rail_wsg as (
+  select distinct
+    w.watershed_group_code
+  from whse_basemapping.fwa_watershed_groups_poly w
+  inner join whse_basemapping.gba_railway_tracks_sp r
+  on st_intersects(w.geom, r.geom)
 ),
 
 totals as
 (select
- watershed_group_code,
+ s.watershed_group_code,
  round((sum(st_length(geom)) filter (where model_spawning_ch is true) / 1000 )::numeric, 2)  ch_spawning_km_total,
  round((sum(st_length(geom)) filter (where model_rearing_ch is true) / 1000 )::numeric, 2) ch_rearing_km_total,
+ round((sum(st_length(geom)) filter (where model_spawning_cm is true) / 1000)::numeric, 2)  cm_spawning_km_total,
  round((sum(st_length(geom)) filter (where model_spawning_co is true) / 1000)::numeric, 2)  co_spawning_km_total,
  round((sum(st_length(geom)) filter (where model_rearing_co is true) / 1000)::numeric, 2) co_rearing_km_total,
-
+ round((sum(st_length(geom)) filter (where model_spawning_pk is true) / 1000)::numeric, 2)  pk_spawning_km_total,
  round((sum(st_length(geom)) filter (where model_spawning_sk is true) / 1000)::numeric, 2)  sk_spawning_km_total,
  round((sum(st_length(geom)) filter (where model_rearing_sk is true) / 1000)::numeric, 2) sk_rearing_km_total,
-
  round((sum(st_length(geom)) filter (where model_spawning_st is true) / 1000)::numeric, 2)  st_spawning_km_total,
- round((sum(st_length(geom)) filter (where model_rearing_st is true) / 1000)::numeric, 2) st_rearing_km_total
-from bcfishpass.streams
-where watershed_group_code in (select watershed_group_code from studyarea)
-and stream_order < 8
-group by watershed_group_code),
+ round((sum(st_length(geom)) filter (where model_rearing_st is true) / 1000)::numeric, 2) st_rearing_km_total, 
+ round((sum(st_length(geom)) filter (where model_spawning_ch is true or
+    model_rearing_ch is true or
+    model_spawning_cm is true or
+    model_spawning_co is true or
+    model_rearing_co is true or
+    model_spawning_pk is true or
+    model_spawning_sk is true or
+    model_rearing_sk is true or
+    model_spawning_st is true or
+    model_rearing_st is true 
+ ) / 1000)::numeric, 2) all_spawningrearing_km_total
+from bcfishpass.streams s
+inner join studyarea sa
+on s.watershed_group_code = sa.watershed_group_code
+group by s.watershed_group_code),
 
 rail_barriers as
 (
@@ -44,7 +65,8 @@ rail_barriers as
     sk_spawning_km ,
     sk_rearing_km ,
     st_spawning_km ,
-    st_rearing_km
+    st_rearing_km,
+    all_spawningrearing_km
   from bcfishpass.crossings
   where watershed_group_code in (select watershed_group_code from studyarea)
   and crossing_feature_type = 'RAIL'
@@ -63,7 +85,8 @@ potentially_blocked as (
   round((sum(a.sk_spawning_km))::numeric, 2) as sk_spawning_km,
   round((sum(a.sk_rearing_km))::numeric, 2) as sk_rearing_km,
   round((sum(a.st_spawning_km))::numeric, 2) as st_spawning_km,
-  round((sum(a.st_rearing_km))::numeric, 2) as st_rearing_km
+  round((sum(a.st_rearing_km))::numeric, 2) as st_rearing_km,
+  round((sum(a.all_spawningrearing_km))::numeric, 2) as all_spawningrearing_km
 from rail_barriers a
 left outer join rail_barriers b
 on FWA_Downstream(
@@ -97,6 +120,9 @@ order by watershed_group_code)
 
 select
  a.watershed_group_code,
+ case 
+   when r.watershed_group_code is not null then true
+ end as rail_present,
  a.ch_spawning_km_total,
  b.ch_spawning_km as ch_spawning_km_aboverail,
  round(((b.ch_spawning_km / a.ch_spawning_km_total) * 100)::numeric, 2) as ch_spawning_aboverailxing_pct,
@@ -131,8 +157,15 @@ select
  round(((b.st_spawning_km / a.st_spawning_km_total) * 100)::numeric, 2) as st_spawning_aboverailxing_pct,
  a.st_rearing_km_total,
  b.st_rearing_km as st_rearing_km_aboverail,
- round(((b.st_rearing_km / a.st_rearing_km_total) * 100)::numeric, 2) as st_rearing_aboverailxing_pct
+ round(((b.st_rearing_km / a.st_rearing_km_total) * 100)::numeric, 2) as st_rearing_aboverailxing_pct,
+
+ a.all_spawningrearing_km_total,
+ b.all_spawningrearing_km as all_spawningrearing_km_aboverail,
+ round(((b.all_spawningrearing_km / a.all_spawningrearing_km_total) * 100)::numeric, 2) as all_spawningrearing_aboverailxing_pct
+
 from totals a
 left outer join potentially_blocked b
 on a.watershed_group_code = b.watershed_group_code
+left outer join rail_wsg r
+on a.watershed_group_code = r.watershed_group_code
 order by a.watershed_group_code;

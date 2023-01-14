@@ -22,32 +22,18 @@ Load exclusion area (for lateral analysis, we exclude the Fraser Valley downstre
 
 With the `bcfishpass` database loaded and set as your `$DATABASE_URL`, the report is a collection of queries:
 
-1. Generate a study area
+We are reporting on salmon/steelhead only. Totals columns in the crossings/barriers tables include bull trout - before summarizing, remove BT spawn/rear and re-run point report
 
-        psql $DATABASE_URL -f sql/study_area.sql
+        psql -c "update bcfishpass.streams set model_spawning_bt = null where model_spawning_bt is not null;"
 
-2. Generate summaries per watershed group within study area, columns are described in `overview_columns.csv`
+        psql -c "update bcfishpass.streams set model_rearing_bt = null where model_rearing_bt is not null;"
 
-        psql2csv $DATABASE_URL < sql/overview.sql > overview.csv
+        # in bcfishpass folder, re-run point stats to ensure all_spawningrearing columns are 
+        # cleared of any bull trout spawning/rearing totals
+        rm .make/crossing_stats
+        make .make/crossing_stats --debug=basic
 
-3. Generate per-crossing report, columns are described in `rail_crossings_columns.csv`
 
-        psql2csv $DATABASE_URL < sql/rail_crossings.sql > rail_crossings.csv
+Run reports:
 
-4. Sumarize length modelled habitat in the study area, and the length/pct potentially inaccessible due to rail barriers (first query summarizes per watershed group, second is total for the entire study area)
-
-        psql2csv $DATABASE_URL < sql/output1.sql > output1.csv
-        psql2csv $DATABASE_URL < sql/output1_studyarea.sql > output1_studyarea.csv
-
-5. Generate draft lateral habitat report
-
-        psql $DATABASE_URL -f sql/lateral_potential_fraser.sql 
-        psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from temp.lateral_potential_fraser"
-        psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from temp.lateral_disconnected_fraser"
-        psql $DATABASE_URL -c "select count(*) from temp.lateral_disconnected_fraser"
-        psql $DATABASE_URL -c "select avg(st_area(geom) / 10000) from temp.lateral_disconnected_fraser"
-        psql2csv $DATABASE_URL < sql/lateral_by_wsg.sql > lateral_area_by_wsg.csv
-
-6. Generate restoration scenarios for rail barriers with up to 4 additional crossings
-
-        psql2csv $DATABASE_URL < sql/sets_of_five.sql > rail_sets_of_five.csv
+        ./report.sh

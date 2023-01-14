@@ -1,6 +1,22 @@
 -- report on length and count of crossings in study area, per watershed group
 
-with rail_overlay as
+with studyarea as (
+  select 
+    s.watershed_group_code,
+    b.geom
+  from bcfishpass.wsg_species_presence s
+  inner join whse_basemapping.fwa_watershed_groups_poly b
+  on s.watershed_group_code = b.watershed_group_code
+  where 
+    s.ch is not null or
+    s.cm is not null or
+    s.co is not null or
+    s.pk is not null or
+    s.sk is not null or 
+    s.st is not null
+),
+
+rail_overlay as
 (
   select
     n.watershed_group_code,
@@ -8,12 +24,12 @@ with rail_overlay as
       when st_coveredby(p.geom, n.geom) then p.geom
       else st_multi(st_intersection(p.geom,n.geom))
     end as geom
-  from whse_basemapping.gba_railway_tracks_sp as p
-  inner join temp.rail_studyarea as n
-  on st_intersects(p.geom, n.geom)
+  from studyarea n 
+  left outer join whse_basemapping.gba_railway_tracks_sp as p
+  on st_intersects(n.geom, p.geom)
 ),
 
--- Total rail network length in study area
+-- Total rail network length per group
 length_rail as
 (
 select
@@ -59,8 +75,8 @@ count_xings as
              (c.barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or c.barriers_st_dnstr = array[]::text[]) and
              barrier_status in ('BARRIER', 'POTENTIAL')
              ) as n_dams_potentially_accessible_potential_barriers
-  from temp.rail_studyarea sa
-  inner join bcfishpass.crossings c on st_within(c.geom, sa.geom)
+  from studyarea sa
+  inner join bcfishpass.crossings c on c.watershed_group_code = sa.watershed_group_code
   group by sa.watershed_group_code
 ),
 
@@ -94,7 +110,7 @@ stream_length as
                                                   )) / 1000)::numeric, 2), 0) as stream_all_spawningrearing_km
     from bcfishpass.streams s
     left outer join whse_basemapping.fwa_waterbodies wb on s.waterbody_key = wb.waterbody_key
-    where s.watershed_group_code in (select distinct watershed_group_code from temp.rail_studyarea)
+    where s.watershed_group_code in (select distinct watershed_group_code from studyarea)
     and s.stream_order < 8
     group by s.watershed_group_code
 ),
@@ -120,7 +136,7 @@ rail_barriers as
     st_rearing_km,
     all_spawningrearing_km
   from bcfishpass.crossings
-  where watershed_group_code in (select distinct watershed_group_code from temp.rail_studyarea)
+  where watershed_group_code in (select distinct watershed_group_code from studyarea)
   and crossing_feature_type = 'RAIL'
   and barrier_status in ('BARRIER', 'POTENTIAL')
 ),
@@ -172,7 +188,7 @@ potentially_blocked as (
 )
 
 -- combine all the columns
-select distinct -- distinct because the study area polys are subdivided
+select distinct 
   sa.watershed_group_code,
   coalesce(lr.length_rail_km, 0) as length_rail_km,
   x.n_rail_crossings,
@@ -211,7 +227,7 @@ select distinct -- distinct because the study area polys are subdivided
   pb.st_spawning_km as stream_st_spawning_aboverail_km,
   pb.st_rearing_km as stream_st_rearing_aboverail_km,
   pb.all_spawningrearing_km as stream_all_spawningrearing_aboverail_km
-from temp.rail_studyarea sa
+from studyarea sa
 left outer join length_rail lr on sa.watershed_group_code = lr.watershed_group_code
 left outer join count_xings x on sa.watershed_group_code = x.watershed_group_code
 left outer join stream_length sl on sa.watershed_group_code = sl.watershed_group_code
