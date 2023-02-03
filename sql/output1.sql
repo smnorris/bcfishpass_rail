@@ -1,3 +1,5 @@
+-- report on amount and percent of salmon/steelhead spawning/rearing above rail barriers
+
 with studyarea as (
   select 
     watershed_group_code

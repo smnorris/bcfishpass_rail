@@ -1,9 +1,9 @@
 -- per barrier report
 -- extract rail barriers on potentially accessible streams within study area
+
 with xings as
 (
   select *
- 
   from bcfishpass.crossings
   where
     watershed_group_code in (
@@ -11,6 +11,7 @@ with xings as
     )
     and crossing_feature_type = 'RAIL'
     and barrier_status in ('BARRIER', 'POTENTIAL')
+    and blue_line_key = watershed_key
     and (barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or barriers_st_dnstr = array[]::text[] )
 ),
 
@@ -88,6 +89,7 @@ xings_upstr as
     1
   )
   where b.barrier_status in ('BARRIER','POTENTIAL')
+  and b.blue_line_key = b.watershed_key
   group by a.aggregated_crossings_id
 ),
 
