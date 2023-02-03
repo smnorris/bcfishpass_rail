@@ -1,7 +1,10 @@
 #!/bin/bash
 set -euxo pipefail
 
-psql2csv $DATABASE_URL < sql/overview.sql > output/overview.csv
+psql $DATABASE_URL sql/study_area.sql  # create optimized (subdivided) study area geometries
+
+psql2csv $DATABASE_URL < sql/overview.sql > output/overview.csv # not required but valuable for QA if needed
+psql2csv $DATABASE_URL < sql/output1.sql > output/output1.csv
 psql2csv $DATABASE_URL < sql/rail_crossings.sql > output/rail_crossings.csv
 
 

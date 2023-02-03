@@ -14,6 +14,7 @@ with studyarea as (
     s.pk is not null or
     s.sk is not null or 
     s.st is not null
+  order by watershed_group_code
 ),
 
 rail_overlay as
@@ -87,16 +88,33 @@ stream_length as
     watershed_group_code,
     coalesce(round((sum(st_length(s.geom)))::numeric, 2))  as stream_km,
     coalesce(round(((sum(st_length(s.geom)) filter (where barriers_ch_cm_co_pk_sk_dnstr = array[]::text[] or barriers_st_dnstr = array[]::text[])) / 1000)::numeric, 2), 0) as stream_potentially_accessible_km,
+    
     round((sum(st_length(s.geom)) filter (where s.model_spawning_ch is true) / 1000 )::numeric, 2)  stream_ch_spawning_km,
     round((sum(st_length(s.geom)) filter (where s.model_rearing_ch is true) / 1000 )::numeric, 2) stream_ch_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_ch is true
+                                             or s.model_rearing_ch is true) / 1000 )::numeric, 2) stream_ch_spawningrearing_km,
+    
     round((sum(st_length(s.geom)) filter (where s.model_spawning_cm is true) / 1000 )::numeric, 2) stream_cm_spawning_km,
+    
     round((sum(st_length(s.geom)) filter (where s.model_spawning_co is true) / 1000)::numeric, 2)  stream_co_spawning_km,
     round((sum(st_length(s.geom)) filter (where s.model_rearing_co is true) / 1000)::numeric, 2) stream_co_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_co is true
+                                             or s.model_rearing_co is true) / 1000 )::numeric, 2) stream_co_spawningrearing_km,
+    
+    
     round((sum(st_length(s.geom)) filter (where s.model_spawning_pk is true) / 1000 )::numeric, 2) stream_pk_spawning_km,
+    
     round((sum(st_length(s.geom)) filter (where s.model_spawning_sk is true) / 1000)::numeric, 2)  stream_sk_spawning_km,
     round((sum(st_length(s.geom)) filter (where s.model_rearing_sk is true) / 1000)::numeric, 2) stream_sk_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_sk is true
+                                             or s.model_rearing_sk is true) / 1000 )::numeric, 2) stream_sk_spawningrearing_km,
+    
+
     round((sum(st_length(s.geom)) filter (where s.model_spawning_st is true) / 1000)::numeric, 2)  stream_st_spawning_km,
     round((sum(st_length(s.geom)) filter (where s.model_rearing_st is true) / 1000)::numeric, 2) stream_st_rearing_km,
+    round((sum(st_length(s.geom)) filter (where s.model_spawning_st is true
+                                             or s.model_rearing_st is true) / 1000 )::numeric, 2) stream_st_spawningrearing_km,
+    
     coalesce(round(((sum(st_length(s.geom)) filter (where s.model_spawning_ch is true or
                                                         s.model_spawning_cm is true or
                                                         s.model_spawning_co is true or
@@ -111,14 +129,13 @@ stream_length as
     from bcfishpass.streams s
     left outer join whse_basemapping.fwa_waterbodies wb on s.waterbody_key = wb.waterbody_key
     where s.watershed_group_code in (select distinct watershed_group_code from studyarea)
-    and s.stream_order < 8
     group by s.watershed_group_code
 ),
 
 rail_barriers as
 (
   select
-    aggregated_crossings_id,
+    barriers_anthropogenic_id,
     watershed_group_code,
     blue_line_key,
     downstream_route_measure,
@@ -135,10 +152,9 @@ rail_barriers as
     st_spawning_km ,
     st_rearing_km,
     all_spawningrearing_km
-  from bcfishpass.crossings
+  from bcfishpass.barriers_anthropogenic
   where watershed_group_code in (select distinct watershed_group_code from studyarea)
-  and crossing_feature_type = 'RAIL'
-  and barrier_status in ('BARRIER', 'POTENTIAL')
+  and barrier_type = 'RAIL'
 ),
 
 potentially_blocked as (
@@ -182,7 +198,7 @@ potentially_blocked as (
     a.st_spawning_km  > 0 or
     a.st_rearing_km > 0
   )
-  and b.aggregated_crossings_id is null
+  and b.barriers_anthropogenic_id is null
   group by a.watershed_group_code
   order by a.watershed_group_code
 )

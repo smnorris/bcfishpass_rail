@@ -1,5 +1,6 @@
 with studyarea as (
-  select watershed_group_code
+  select 
+    watershed_group_code
   from bcfishpass.wsg_species_presence s
   where 
     s.ch is not null or
@@ -50,7 +51,7 @@ group by s.watershed_group_code),
 rail_barriers as
 (
   select
-    aggregated_crossings_id,
+    barriers_anthropogenic_id,
     watershed_group_code,
     blue_line_key,
     downstream_route_measure,
@@ -67,10 +68,9 @@ rail_barriers as
     st_spawning_km ,
     st_rearing_km,
     all_spawningrearing_km
-  from bcfishpass.crossings
+  from bcfishpass.barriers_anthropogenic
   where watershed_group_code in (select watershed_group_code from studyarea)
-  and crossing_feature_type = 'RAIL'
-  and barrier_status in ('BARRIER', 'POTENTIAL')
+  and barrier_type = 'RAIL'
 ),
 
 potentially_blocked as (
@@ -113,10 +113,11 @@ a.sk_spawning_km  > 0 or
 a.sk_rearing_km  > 0 or
 a.st_spawning_km  > 0 or
 a.st_rearing_km > 0)
-and b.aggregated_crossings_id is null
+and b.barriers_anthropogenic_id is null
 group by
   a.watershed_group_code
 order by watershed_group_code)
+
 
 select
  a.watershed_group_code,
@@ -168,4 +169,4 @@ left outer join potentially_blocked b
 on a.watershed_group_code = b.watershed_group_code
 left outer join rail_wsg r
 on a.watershed_group_code = r.watershed_group_code
-order by a.watershed_group_code;
+order by a.watershed_group_code
