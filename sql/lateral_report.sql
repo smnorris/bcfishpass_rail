@@ -5,10 +5,9 @@ with overlay1 as
    WHEN ST_CoveredBy(a.geom, b.geom) THEN st_area(a.geom) / 10000
    ELSE st_area(ST_Intersection(a.geom, b.geom)) / 10000
   END As area_ha
-from temp.lateral_potential_fraser a
-inner join whse_basemapping.fwa_watershed_groups_poly b
+from temp.habitat_lateral_studyarea a
+inner join temp.rail_studyarea b
 on st_intersects(a.geom, b.geom)
-where b.wscode_ltree <@ '100'::ltree
 ),
 
 sum_1 as
@@ -26,10 +25,9 @@ overlay2 as
    WHEN ST_CoveredBy(a.geom, b.geom) THEN st_area(a.geom) / 10000
    ELSE st_area(ST_Intersection(a.geom, b.geom)) / 10000
   END As area_ha
-from temp.lateral_disconnected_fraser a
-inner join whse_basemapping.fwa_watershed_groups_poly b
+from temp.habitat_lateral_disconnected_rail_studyarea a
+inner join temp.rail_studyarea b
 on st_intersects(a.geom, b.geom)
-where b.wscode_ltree <@ '100'::ltree
 ),
 
 sum_2 as
@@ -42,6 +40,13 @@ sum_2 as
 
 select 
   s1.watershed_group_code,
+  case 
+     when s1.watershed_group_code = 'OKAN' then 'OKANAGAN'
+     when s1.watershed_group_code in ('BONP','BBAR','LNIC','DEAD','CHWK','COTR','DRIR','FRAN','FRCN','HARR','LCHL','LFRA','LILL','LNTH','LSAL','LTRE','MIDR','MORK','NARC','NECR','QUES','SAJR','SALR','SETN','SHUL','STHM','STUL','TABR','TAKL','THOM','TWAC','UFRA','UNTH','USHU','UTRE','WILL') then 'FRASER'
+     when s1.watershed_group_code in ('BULK','KISP','KITR','KLUM','LKEL','LSKE','MORR','SUST','WORC') then 'SKEENA'
+     when s1.watershed_group_code = 'SQAM' then 'SQUAMISH'
+     when s1.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT') then 'VANCOUVER_ISLAND'
+ end as watershed_general,
   s1.area_ha as area_ha_total,
   s2.area_ha as area_ha_isolated
 from sum_1 s1

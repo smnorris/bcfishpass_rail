@@ -131,6 +131,13 @@ hab_dnstr as
 
 select
   a.watershed_group_code,
+  case 
+     when a.watershed_group_code = 'OKAN' then 'OKANAGAN'
+     when a.watershed_group_code in ('BONP','BBAR','LNIC','DEAD','CHWK','COTR','DRIR','FRAN','FRCN','HARR','LCHL','LFRA','LILL','LNTH','LSAL','LTRE','MIDR','MORK','NARC','NECR','QUES','SAJR','SALR','SETN','SHUL','STHM','STUL','TABR','TAKL','THOM','TWAC','UFRA','UNTH','USHU','UTRE','WILL') then 'FRASER'
+     when a.watershed_group_code in ('BULK','KISP','KITR','KLUM','LKEL','LSKE','MORR','SUST','WORC') then 'SKEENA'
+     when a.watershed_group_code = 'SQAM' then 'SQUAMISH'
+     when a.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT') then 'VANCOUVER_ISLAND'
+ end as watershed_general,
   a.aggregated_crossings_id,
   a.modelled_crossing_id,
   a.stream_crossing_id,

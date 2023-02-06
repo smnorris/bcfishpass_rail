@@ -124,6 +124,13 @@ order by watershed_group_code)
 select
  a.watershed_group_code,
  case 
+     when r.watershed_group_code = 'OKAN' then 'OKANAGAN'
+     when r.watershed_group_code in ('BONP','BBAR','LNIC','DEAD','CHWK','COTR','DRIR','FRAN','FRCN','HARR','LCHL','LFRA','LILL','LNTH','LSAL','LTRE','MIDR','MORK','NARC','NECR','QUES','SAJR','SALR','SETN','SHUL','STHM','STUL','TABR','TAKL','THOM','TWAC','UFRA','UNTH','USHU','UTRE','WILL') then 'FRASER'
+     when r.watershed_group_code in ('BULK','KISP','KITR','KLUM','LKEL','LSKE','MORR','SUST','WORC') then 'SKEENA'
+     when r.watershed_group_code = 'SQAM' then 'SQUAMISH'
+     when r.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT') then 'VANCOUVER_ISLAND'
+ end as watershed_general,
+ case 
    when r.watershed_group_code is not null then true
  end as rail_present,
  a.ch_spawning_km_total,
