@@ -24,12 +24,8 @@ ogr2ogr -f PostgreSQL $DATABASE_URL \
   
 psql $DATABASE_URL -f sql/lateral_studyarea.sql
 
-# totals
-psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from bcfishpass.habitat_lateral"
-psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from bcfishpass.habitat_lateral_disconnected_rail"
-psql $DATABASE_URL -c "select count(*) from bcfishpass.habitat_lateral_disconnected_rail"
-psql $DATABASE_URL -c "select avg(st_area(geom) / 10000) from bcfishpass.habitat_lateral_disconnected_rail"
-
-# report
+# lateral report
 psql2csv $DATABASE_URL < sql/lateral_report.sql > output/lateral_report.csv
 
+# summaries
+psql2csv $DATABASE_URL < sql/summary.sql > output/summary.csv
