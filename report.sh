@@ -28,4 +28,10 @@ psql $DATABASE_URL -f sql/lateral_studyarea.sql
 psql2csv $DATABASE_URL < sql/lateral_report.sql > output/lateral_report.csv
 
 # summaries
+psql $DATBASE_URL -c "drop table if exists temp.rail_studyarea_lateral_merged;
+create table temp.rail_studyarea_lateral_merged
+  as select 
+    (st_dump(st_union(geom))).geom as geom
+  from temp.rail_studyarea_lateral;
+create index on temp.rail_studyarea_lateral using gist (geom);"
 psql2csv $DATABASE_URL < sql/summary.sql > output/summary.csv

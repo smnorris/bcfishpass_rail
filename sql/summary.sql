@@ -7,6 +7,7 @@
 -- n rail CBS crossings on potentially accessible stream
 -- n rail CBS crossings on modelled habitat
 
+
 -- Total rail network length in our target area (km)
 select
   'Total length of railway (km)' as desc,
@@ -103,7 +104,7 @@ union all
 union all
 
 select 
-  'Total area modelled potential lateral habitat blocked by rail (ha)' as desc,
+  'Total area of modelled potential lateral habitat blocked by rail (ha)' as desc,
    round(sum(area_ha)::numeric) as val
 from (
 select 
@@ -129,7 +130,7 @@ select
    ELSE ST_Intersection(a.geom, b.geom) 
   END As geom
 from temp.habitat_lateral_disconnected_rail_studyarea a
-inner join temp.rail_studyarea b
+inner join temp.rail_studyarea_lateral_merged b
 on st_intersects(a.geom, b.geom)
 ) as l
 
@@ -145,6 +146,6 @@ select
    ELSE ST_Intersection(a.geom, b.geom) 
   END As geom
 from temp.habitat_lateral_disconnected_rail_studyarea a
-inner join temp.rail_studyarea b
+inner join temp.rail_studyarea_lateral_merged b
 on st_intersects(a.geom, b.geom)
-) as l
+) as l;
