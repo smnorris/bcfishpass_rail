@@ -9,14 +9,15 @@ Report on modelled impacts of railways to habitat connectivity for Pacific Salmo
 
 ## Prep data
 
-- build `bcfishpass`, including lateral habitat model
+- build `bcfishpass`, including lateral habitat model, modelling above noted species
 
-- if `bcfishpass` inluded `BT` modelling, update totals to remove `BT` values from streams spawning/rearing and re-run crossing stats 
-(adapt/modify if any other non salmon/steelhead spawning/rearing are also included in the crossing_stats queries)
+- if `bcfishpass` included additional species modelling (eg `BT`), update totals to remove spawning/rearing for these species from stats (adapt/modify if any other non salmon/steelhead spawning/rearing are also included in the crossing_stats queries)
 
-        # in bcfishpass folder
+        # remove BT spawning and rearing output classification
         psql -c "update bcfishpass.streams set model_spawning_bt = null where model_spawning_bt is not null;"
         psql -c "update bcfishpass.streams set model_rearing_bt = null where model_rearing_bt is not null;"
+        # with BT spawn/rear removed from streams table, update summaries for total spawning/rearing in 
+        # the crossings tables
         rm .make/crossing_stats
         make .make/crossing_stats --debug=basic
 
@@ -25,3 +26,5 @@ Report on modelled impacts of railways to habitat connectivity for Pacific Salmo
 ## Run the reporting
 
     ./report.sh
+
+See generated reports as csv in `/output`
