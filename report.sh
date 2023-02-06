@@ -14,5 +14,5 @@ psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from bcfishpass.habitat
 psql $DATABASE_URL -c "select sum(st_area(geom)) / 10000 from bcfishpass.habitat_lateral_disconnected_rail"
 psql $DATABASE_URL -c "select count(*) from bcfishpass.habitat_lateral_disconnected_rail"
 psql $DATABASE_URL -c "select avg(st_area(geom) / 10000) from bcfishpass.habitat_lateral_disconnected_rail"
-psql2csv $DATABASE_URL < sql/lateral_report.sql > lateral_report.csv
+psql2csv $DATABASE_URL < sql/lateral_report.sql > output/lateral_report.csv
 
