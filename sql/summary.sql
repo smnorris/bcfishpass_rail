@@ -104,8 +104,18 @@ union all
 
 select 
   'Total area modelled potential lateral habitat blocked by rail (ha)' as desc,
-   round((sum(st_area(geom)) / 10000)::numeric) as val
-from bcfishpass.habitat_lateral_disconnected_rail
+   round(sum(area_ha)::numeric) as val
+from (
+select 
+  b.watershed_group_code,
+  CASE
+   WHEN ST_CoveredBy(a.geom, b.geom) THEN st_area(a.geom) / 10000
+   ELSE st_area(ST_Intersection(a.geom, b.geom)) / 10000
+  END As area_ha
+from temp.habitat_lateral_disconnected_rail_studyarea a
+inner join temp.rail_studyarea b
+on st_intersects(a.geom, b.geom)
+) as l
 
 union all
 
