@@ -122,13 +122,29 @@ union all
 select 
   'Count of polygons with potential lateral habitat blocked by rail' as desc,
   count(*) as val
-from bcfishpass.habitat_lateral_disconnected_rail
+from (
+select 
+  CASE
+   WHEN ST_CoveredBy(a.geom, b.geom) THEN a.geom
+   ELSE ST_Intersection(a.geom, b.geom) 
+  END As geom
+from temp.habitat_lateral_disconnected_rail_studyarea a
+inner join temp.rail_studyarea b
+on st_intersects(a.geom, b.geom)
+) as l
 
 union all
 
 select 
   'Average polygon size of potential lateral habitat blocked by rail' as desc,
   round((avg(st_area(geom) / 10000)::numeric)) as val
-from bcfishpass.habitat_lateral_disconnected_rail
-
-
+from (
+select 
+  CASE
+   WHEN ST_CoveredBy(a.geom, b.geom) THEN a.geom
+   ELSE ST_Intersection(a.geom, b.geom) 
+  END As geom
+from temp.habitat_lateral_disconnected_rail_studyarea a
+inner join temp.rail_studyarea b
+on st_intersects(a.geom, b.geom)
+) as l
