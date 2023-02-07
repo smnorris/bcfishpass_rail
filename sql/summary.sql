@@ -137,7 +137,7 @@ on st_intersects(a.geom, b.geom)
 union all
 
 select 
-  'Average polygon size of potential lateral habitat blocked by rail' as desc,
+  'Average polygon size of potential lateral habitat blocked by rail (ha)' as desc,
   round((avg(st_area(geom) / 10000)::numeric)) as val
 from (
 select 
