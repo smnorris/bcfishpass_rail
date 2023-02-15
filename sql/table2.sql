@@ -1,4 +1,5 @@
--- report on amount and percent of salmon/steelhead spawning/rearing above rail barriers
+-- aggregate output1.sql into table2 output
+-- Amount and proportion of potential linear spawning and rearing habitat that may blocked by rail lines within study area
 
 with studyarea as (
   select 
@@ -104,10 +105,11 @@ a.st_rearing_km > 0)
 and b.barriers_anthropogenic_id is null
 group by
   a.watershed_group_code
-order by watershed_group_code)
+order by watershed_group_code),
 
-
-select
+output1 as 
+(
+  select
  a.watershed_group_code,
  case 
      when r.watershed_group_code = 'OKAN' then 'OKANAGAN'
@@ -165,3 +167,77 @@ on a.watershed_group_code = b.watershed_group_code
 left outer join studyarea r
 on a.watershed_group_code = r.watershed_group_code
 order by a.watershed_group_code
+)
+
+select 
+'Spawning - Chinook' as species,
+  sum(ch_spawning_km_total) as habitat_total,
+  sum(ch_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(ch_spawning_km_aboverail) / sum(ch_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Spawning - Chum' as species,
+  sum(cm_spawning_km_total) as habitat_total,
+  sum(cm_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(cm_spawning_km_aboverail) / sum(cm_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Spawning - Coho' as species,
+  sum(co_spawning_km_total) as habitat_total,
+  sum(co_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(co_spawning_km_aboverail) / sum(co_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Spawning - Pink' as species,
+  sum(pk_spawning_km_total) as habitat_total,
+  sum(pk_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(pk_spawning_km_aboverail) / sum(pk_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Spawning - Sockeye' as species,
+  sum(sk_spawning_km_total) as habitat_total,
+  sum(sk_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(sk_spawning_km_aboverail) / sum(sk_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion  
+from output1
+union all
+select
+  'Spawning - Steelhead' as species,
+  sum(st_spawning_km_total) as habitat_total,
+  sum(st_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(st_spawning_km_aboverail) / sum(st_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion  
+from output1
+
+union all
+
+select 
+'Rearing - Chinook' as species,
+  sum(ch_rearing_km_total) as habitat_total,
+  sum(ch_rearing_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(ch_rearing_km_aboverail) / sum(ch_rearing_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Rearing - Coho' as species,
+  sum(co_rearing_km_total) as habitat_total,
+  sum(co_rearing_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(co_rearing_km_aboverail) / sum(co_rearing_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Rearing - Sockeye' as species,
+  sum(sk_rearing_km_total) as habitat_total,
+  sum(sk_rearing_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(sk_rearing_km_aboverail) / sum(sk_rearing_km_total)) * 100)::numeric, 2) as blocked_proportion  
+from output1
+union all
+select
+  'Rearing - Steelhead' as species,
+  sum(st_rearing_km_total) as habitat_total,
+  sum(st_rearing_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(st_rearing_km_aboverail) / sum(st_rearing_km_total)) * 100)::numeric, 2) as blocked_proportion  
+from output1;
+

@@ -24,7 +24,7 @@ drop table if exists temp.habitat_lateral_studyarea;
 create table temp.habitat_lateral_studyarea as
 SELECT
   row_number() over() as id,
-  a.value,
+  a.val,
   CASE
    WHEN ST_CoveredBy(a.geom, b.geom)
    THEN a.geom
