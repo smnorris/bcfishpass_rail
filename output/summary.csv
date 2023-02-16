@@ -1,10 +1,10 @@
 desc,val
 Total length of railway (km),7153
-"Count rail-stream crossings, total",4152
-"Count rail-stream crossings, potential barrier",3581
-"Count rail-stream crossings, potential barrier, potentially accessible",1795
-"Count rail-stream crossings, potential barrier, potential spawn/rear habitat",396
-Total area modelled lateral habitat (ha),1468271
-Total area of modelled potential lateral habitat blocked by rail (ha),53597
-Count of polygons with potential lateral habitat blocked by rail,2111
-Average polygon size of potential lateral habitat blocked by rail (ha),25
+"Count rail-stream crossings, total",4155
+"Count rail-stream crossings, potential barrier",3583
+"Count rail-stream crossings, potential barrier, potentially accessible",1780
+"Count rail-stream crossings, potential barrier, potential spawn/rear habitat",428
+Total area modelled lateral habitat (ha),20151943
+Total area of modelled potential lateral habitat blocked by rail (ha),67083
+Count of polygons with potential lateral habitat blocked by rail,2223
+Average polygon size of potential lateral habitat blocked by rail (ha),30
