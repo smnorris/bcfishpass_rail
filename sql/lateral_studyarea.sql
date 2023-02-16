@@ -24,7 +24,7 @@ drop table if exists temp.habitat_lateral_studyarea;
 create table temp.habitat_lateral_studyarea as
 SELECT
   row_number() over() as id,
-  a.val,
+  a.value,
   CASE
    WHEN ST_CoveredBy(a.geom, b.geom)
    THEN a.geom
@@ -32,7 +32,7 @@ SELECT
     ST_Multi(
       ST_Intersection(a.geom, b.geom)
       ) END As geom
-from bcfishpass.habitat_lateral a
+from bcfishpass.habitat_lateral_clean a
 inner join temp.rail_studyarea_lateral b
 on st_intersects(a.geom, b.geom);
 
