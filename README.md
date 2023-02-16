@@ -28,3 +28,10 @@ Report on modelled impacts of railways to habitat connectivity for Pacific Salmo
     ./report.sh
 
 See generated reports as csv in `/output`
+
+
+## Archive data
+
+So we have something to refer back to, dump the `bcfishpass` schema to file:
+
+    pg_dump -Fc $DATABASE_URL -n bcfishpas > bcfishpass.dump
