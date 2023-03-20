@@ -41,11 +41,10 @@ sum_2 as
 select 
   s1.watershed_group_code,
   case 
-     when s1.watershed_group_code = 'OKAN' then 'OKANAGAN'
+     when s1.watershed_group_code = 'OKAN' then 'COLUMBIA (OKANAGAN)'
      when s1.watershed_group_code in ('BONP','BBAR','LNIC','DEAD','CHWK','COTR','DRIR','FRAN','FRCN','HARR','LCHL','LFRA','LILL','LNTH','LSAL','LTRE','MIDR','MORK','NARC','NECR','QUES','SAJR','SALR','SETN','SHUL','STHM','STUL','TABR','TAKL','THOM','TWAC','UFRA','UNTH','USHU','UTRE','WILL') then 'FRASER'
-     when s1.watershed_group_code in ('BULK','KISP','KITR','KLUM','LKEL','LSKE','MORR','SUST','WORC') then 'SKEENA'
-     when s1.watershed_group_code = 'SQAM' then 'SQUAMISH'
-     when s1.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT') then 'VANCOUVER_ISLAND'
+     when s1.watershed_group_code in ('BULK','KISP','KITR','KLUM','LKEL','LSKE','MORR','SUST') then 'SKEENA'
+     when s1.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT','WORC','SQAM') then 'COASTAL'
  end as watershed_general,
   s1.area_ha as area_ha_total,
   s2.area_ha as area_ha_isolated
