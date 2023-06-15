@@ -21,7 +21,22 @@ totals as (
     round((sum(st_length(geom)) filter (where model_rearing_sk is true) / 1000)::numeric, 2) sk_rearing_km_total,
     round((sum(st_length(geom)) filter (where model_spawning_st is true) / 1000)::numeric, 2)  st_spawning_km_total,
     round((sum(st_length(geom)) filter (where model_rearing_st is true) / 1000)::numeric, 2) st_rearing_km_total, 
-    round((sum(st_length(geom)) filter (where model_spawning_ch is true or
+    round((sum(st_length(geom)) filter (where
+       model_spawning_ch is true or
+       model_spawning_cm is true or
+       model_spawning_co is true or
+       model_spawning_pk is true or
+       model_spawning_sk is true or
+       model_spawning_st is true
+    ) / 1000)::numeric, 2) all_spawning_km_total,
+    round((sum(st_length(geom)) filter (where
+       model_rearing_ch is true or
+       model_rearing_co is true or
+       model_rearing_sk is true or
+       model_rearing_st is true
+    ) / 1000)::numeric, 2) all_rearing_km_total,
+    round((sum(st_length(geom)) filter (where
+       model_spawning_ch is true or
        model_rearing_ch is true or
        model_spawning_cm is true or
        model_spawning_co is true or
@@ -56,6 +71,8 @@ rail_barriers as
     sk_rearing_km ,
     st_spawning_km ,
     st_rearing_km,
+    all_spawning_km,
+    all_rearing_km,
     all_spawningrearing_km
   from bcfishpass.barriers_anthropogenic
   where watershed_group_code in (select watershed_group_code from studyarea)
@@ -75,6 +92,8 @@ potentially_blocked as (
   round((sum(a.sk_rearing_km))::numeric, 2) as sk_rearing_km,
   round((sum(a.st_spawning_km))::numeric, 2) as st_spawning_km,
   round((sum(a.st_rearing_km))::numeric, 2) as st_rearing_km,
+  round((sum(a.all_spawning_km))::numeric, 2) as all_spawning_km,
+  round((sum(a.all_rearing_km))::numeric, 2) as all_rearing_km,
   round((sum(a.all_spawningrearing_km))::numeric, 2) as all_spawningrearing_km
 from rail_barriers a
 left outer join rail_barriers b
@@ -156,6 +175,14 @@ output1 as
  b.st_rearing_km as st_rearing_km_aboverail,
  round(((b.st_rearing_km / a.st_rearing_km_total) * 100)::numeric, 2) as st_rearing_aboverailxing_pct,
 
+ a.all_spawning_km_total,
+ b.all_spawning_km as all_spawning_km_aboverail,
+ round(((b.all_spawning_km / a.all_spawning_km_total) * 100)::numeric, 2) as all_spawning_aboverailxing_pct,
+
+ a.all_rearing_km_total,
+ b.all_rearing_km as all_rearing_km_aboverail,
+ round(((b.all_rearing_km / a.all_rearing_km_total) * 100)::numeric, 2) as all_rearing_aboverailxing_pct,
+
  a.all_spawningrearing_km_total,
  b.all_spawningrearing_km as all_spawningrearing_km_aboverail,
  round(((b.all_spawningrearing_km / a.all_spawningrearing_km_total) * 100)::numeric, 2) as all_spawningrearing_aboverailxing_pct
@@ -211,6 +238,14 @@ select
 from output1
 
 union all
+select
+  'Spawning - any/all' as species,
+  sum(all_spawning_km_total) as habitat_total,
+  sum(all_spawning_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(all_spawning_km_aboverail) / sum(all_spawning_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+
+union all
 
 select 
 'Rearing - Chinook' as species,
@@ -238,5 +273,19 @@ select
   sum(st_rearing_km_total) as habitat_total,
   sum(st_rearing_km_aboverail) as habitat_potentially_blocked_by_rail,
   round(((sum(st_rearing_km_aboverail) / sum(st_rearing_km_total)) * 100)::numeric, 2) as blocked_proportion  
+from output1
+union all
+select
+  'Rearing - any/all' as species,
+  sum(all_rearing_km_total) as habitat_total,
+  sum(all_rearing_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(all_rearing_km_aboverail) / sum(all_rearing_km_total)) * 100)::numeric, 2) as blocked_proportion
+from output1
+union all
+select
+  'Spawning/Rearing - any/all' as species,
+  sum(all_spawningrearing_km_total) as habitat_total,
+  sum(all_spawningrearing_km_aboverail) as habitat_potentially_blocked_by_rail,
+  round(((sum(all_spawningrearing_km_aboverail) / sum(all_spawningrearing_km_total)) * 100)::numeric, 2) as blocked_proportion
 from output1;
 
