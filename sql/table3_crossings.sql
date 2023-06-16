@@ -137,3 +137,4 @@ select a.*, c.all_spawningrearing_belowupstrbarriers_km as spawningrearing_upstr
 from temp.table3_railbarriers a
 left outer join column_c c on a.aggregated_crossings_id = c.aggregated_crossings_id
 order by a.aggregated_crossings_id
+

@@ -140,7 +140,9 @@ select
      when c.watershed_group_code in ('BONP','BBAR','LNIC','DEAD','CHWK','COTR','DRIR','FRAN','FRCN','HARR','LCHL','LFRA','LILL','LNTH','LSAL','LTRE','MIDR','MORK','NARC','NECR','QUES','SAJR','SALR','SETN','SHUL','STHM','STUL','TABR','TAKL','THOM','TWAC','UFRA','UNTH','USHU','UTRE','WILL') then 'FRASER'
      when c.watershed_group_code in ('BULK','KISP','KITR','KLUM','LKEL','LSKE','MORR','SUST') then 'SKEENA'
      when c.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT','WORC','SQAM') then 'COASTAL'
-  end as watershed,
+  end as basin,
+  c.watershed_group_code,
+  c.gnis_stream_name,
   coalesce(d.non_rail_barriers_dnstr,0) as non_rail_barriers_dnstr,
   coalesce(u.non_rail_barriers_upstr,0) as non_rail_barriers_upstr,
   round(c.all_spawningrearing_km::numeric, 2) as all_spawningrearing_km
