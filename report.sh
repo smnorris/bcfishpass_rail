@@ -10,7 +10,7 @@ psql $DATABASE_URL --csv < sql/output1.sql > output/output1.csv
 psql $DATABASE_URL --csv < sql/table2.sql > output/table2.csv
 psql $DATABASE_URL < sql/table3_railbarriers.sql                                  # generate initial table
 psql $DATABASE_URL --csv < sql/table3_crossings.sql                               # add first columns
-psql $DATABASE_URL -c "select * from temp.table3_crossings" --csv > output/table3_crossings.csv # dump to file
+psql $DATABASE_URL -c "select * from temp.table3_crossings order by spawningrearing_upstr_tonextbarrier desc, all_spawningrearing_km desc" --csv > output/table3_crossings.csv # dump to file
 psql $DATABASE_URL --csv < sql/table3.sql > output/table3.csv # list all crossings in table 3
 psql $DATABASE_URL --csv < sql/rail_crossings.sql > output/rail_crossings.csv
 

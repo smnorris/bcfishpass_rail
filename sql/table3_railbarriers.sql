@@ -142,6 +142,7 @@ select
      when c.watershed_group_code in ('ALBN','COMX','COWN','PARK','VICT','WORC','SQAM') then 'COASTAL'
   end as basin,
   c.watershed_group_code,
+  w.watershed_group_name,
   c.gnis_stream_name,
   coalesce(d.non_rail_barriers_dnstr,0) as non_rail_barriers_dnstr,
   coalesce(u.non_rail_barriers_upstr,0) as non_rail_barriers_upstr,
@@ -149,5 +150,7 @@ select
 from bcfishpass.crossings c
 inner join for_report r on c.aggregated_crossings_id = r.aggregated_crossings_id
 left outer join non_rail_barriers_dnstr d on c.aggregated_crossings_id = d.aggregated_crossings_id
-left outer join non_rail_barriers_upstr u on c.aggregated_crossings_id = u.aggregated_crossings_id;
+left outer join non_rail_barriers_upstr u on c.aggregated_crossings_id = u.aggregated_crossings_id
+inner join whse_basemapping.fwa_watershed_groups_poly w
+on c.watershed_group_code = w.watershed_group_code;
 
