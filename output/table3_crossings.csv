@@ -38,8 +38,8 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1001805577,SKEENA,BULK,Bulkley River,Graphite Creek,3,1,3.64,
 1003403396,COASTAL,COMX,Comox,Roy Creek,1,5,3.57,
 1013905537,FRASER,MORK,Morkill River,,1,4,3.42,
-1003607017,COASTAL,COWN,Cowichan,Tyee Creek,1,6,3.31,
 1003607027,COASTAL,COWN,Cowichan,Patrolas Creek,2,3,3.31,
+1003607017,COASTAL,COWN,Cowichan,Tyee Creek,1,6,3.31,
 1012202227,FRASER,LSAL,Lower Salmon River,,1,2,3.30,
 1013905386,FRASER,MORK,Morkill River,,4,4,3.21,
 1010305154,FRASER,LFRA,Lower Fraser,,3,6,2.92,
@@ -59,11 +59,11 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1013905431,FRASER,MORK,Morkill River,,1,0,2.50,
 1003607020,COASTAL,COWN,Cowichan,Stocking Creek,1,2,2.49,
 1012202247,FRASER,LSAL,Lower Salmon River,,2,1,2.45,
-1012202219,FRASER,LSAL,Lower Salmon River,,1,3,2.39,
 1001805550,SKEENA,BULK,Bulkley River,Kathlyn Creek,3,1,2.39,
+1012202219,FRASER,LSAL,Lower Salmon River,,1,3,2.39,
 198044,SKEENA,BULK,Bulkley River,,1,3,2.34,
-1018303513,FRASER,SHUL,Shuswap Lake,Legerwood Creek,1,2,2.33,
 1006303969,FRASER,HARR,Harrison River,Hogg Slough,3,3,2.33,
+1018303513,FRASER,SHUL,Shuswap Lake,Legerwood Creek,1,2,2.33,
 1010304993,FRASER,LFRA,Lower Fraser,Como Creek,2,11,2.29,
 1013905480,FRASER,MORK,Morkill River,Craibenn Creek,1,5,2.11,
 1013905409,FRASER,MORK,Morkill River,,3,1,2.03,
@@ -77,11 +77,13 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1001805596,SKEENA,BULK,Bulkley River,,1,0,1.66,
 1010304996,FRASER,LFRA,Lower Fraser,,7,1,1.65,
 1001805506,SKEENA,BULK,Bulkley River,,1,0,1.62,
+1001805555,SKEENA,BULK,Bulkley River,Simpson Creek,6,3,1.61,
 1010305215,FRASER,LFRA,Lower Fraser,,2,1,1.60,
 1010305005,FRASER,LFRA,Lower Fraser,Tulley Slough,1,1,1.49,
 1002801611,FRASER,CHWK,Chilliwack River,,3,1,1.41,
 1010305118,FRASER,LFRA,Lower Fraser,,2,1,1.40,
 1003403397,COASTAL,COMX,Comox,Millard Creek,1,0,1.34,
+1002801596,FRASER,CHWK,Chilliwack River,,5,1,1.34,
 1012601266,FRASER,LTRE,Lower Trembleur Lake,,1,2,1.18,
 1010305114,FRASER,LFRA,Lower Fraser,Austin Creek,2,5,1.16,
 1006303992,FRASER,HARR,Harrison River,,1,3,1.15,
@@ -113,6 +115,7 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1010305025,FRASER,LFRA,Lower Fraser,,2,1,0.64,
 1006303957,FRASER,HARR,Harrison River,,1,1,0.63,
 1010305014,FRASER,LFRA,Lower Fraser,,1,1,0.61,
+1010305214,FRASER,LFRA,Lower Fraser,,5,0,0.61,
 1019004823,COASTAL,SQAM,Squamish,Hop Ranch Creek,1,1,0.60,
 1012401276,SKEENA,LSKE,Lower Skeena River,,1,0,0.58,
 1012601252,FRASER,LTRE,Lower Trembleur Lake,,1,0,0.57,
@@ -121,59 +124,58 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1019703280,FRASER,TABR,Tabor River,,1,2,0.45,
 1012601265,FRASER,LTRE,Lower Trembleur Lake,,1,2,0.44,
 1008501812,SKEENA,KITR,Kitimat River,,1,1,0.42,
-1022202075,FRASER,UFRA,Upper Fraser River,Baldwin Creek,2,0,0.40,
 1008802630,SKEENA,KLUM,Kalum River,Casnorra Creek,1,1,0.40,
 1001805491,SKEENA,BULK,Bulkley River,,2,0,0.40,
-1016502655,COASTAL,PARK,Parksville,,1,1,0.38,
+1022202075,FRASER,UFRA,Upper Fraser River,Baldwin Creek,2,0,0.40,
 1013905389,FRASER,MORK,Morkill River,,4,0,0.38,
 1012202234,FRASER,LSAL,Lower Salmon River,,3,0,0.38,
+1016502655,COASTAL,PARK,Parksville,,1,1,0.38,
 1024740189,FRASER,UFRA,Upper Fraser River,,1,1,0.35,
 1013905413,FRASER,MORK,Morkill River,,2,0,0.34,
-1010305214,FRASER,LFRA,Lower Fraser,,5,0,0.33,
-1013905410,FRASER,MORK,Morkill River,,2,1,0.32,
 1002801608,FRASER,CHWK,Chilliwack River,Luckakuck Creek,6,0,0.32,
-1013905543,FRASER,MORK,Morkill River,,1,0,0.31,
+1013905410,FRASER,MORK,Morkill River,,2,1,0.32,
 1016502635,COASTAL,PARK,Parksville,,3,2,0.31,
+1013905543,FRASER,MORK,Morkill River,,1,0,0.31,
 1010304994,FRASER,LFRA,Lower Fraser,,4,1,0.30,
-1018303491,FRASER,SHUL,Shuswap Lake,,1,0,0.30,
 1008802638,SKEENA,KLUM,Kalum River,,1,1,0.30,
 1013905531,FRASER,MORK,Morkill River,,3,1,0.30,
+1018303491,FRASER,SHUL,Shuswap Lake,,1,0,0.30,
 1012601259,FRASER,LTRE,Lower Trembleur Lake,,1,1,0.29,
 1015605365,FRASER,NECR,Nechako River,,1,17,0.26,
 1013905385,FRASER,MORK,Morkill River,Wolfe Creek,1,1,0.24,
-1002801600,FRASER,CHWK,Chilliwack River,,4,0,0.22,
 1019004822,COASTAL,SQAM,Squamish,Dryden Creek,3,1,0.22,
+1002801600,FRASER,CHWK,Chilliwack River,,4,0,0.22,
 1011508217,FRASER,LNTH,Lower North Thompson River,,1,1,0.21,
-1022202088,FRASER,UFRA,Upper Fraser River,,2,0,0.20,
-1010702836,FRASER,LILL,Lillooet,,1,1,0.20,
-1013905425,FRASER,MORK,Morkill River,,2,0,0.20,
 1017907981,FRASER,SETN,Seton Lake,,2,0,0.20,
+1022202088,FRASER,UFRA,Upper Fraser River,,2,0,0.20,
+1013905425,FRASER,MORK,Morkill River,,2,0,0.20,
+1010702836,FRASER,LILL,Lillooet,,1,1,0.20,
 1010305130,FRASER,LFRA,Lower Fraser,,1,2,0.19,
 1005406238,FRASER,FRAN,Francois Lake,,1,0,0.18,
-1019004764,COASTAL,SQAM,Squamish,Marr Creek,1,4,0.16,
 1019004707,COASTAL,SQAM,Squamish,Swift Creek,2,0,0.16,
+1019004764,COASTAL,SQAM,Squamish,Marr Creek,1,4,0.16,
 1017907976,FRASER,SETN,Seton Lake,Landsborough Creek,3,0,0.13,
 1013905538,FRASER,MORK,Morkill River,,2,0,0.12,
 1020506515,FRASER,THOM,Thompson River,Murray Creek,1,1,0.12,
-1013905453,FRASER,MORK,Morkill River,,1,1,0.11,
 1005406244,FRASER,FRAN,Francois Lake,,1,1,0.11,
+1013905453,FRASER,MORK,Morkill River,,1,1,0.11,
 1013905581,FRASER,MORK,Morkill River,Robinson Creek,1,1,0.10,
-1024742380,SKEENA,LSKE,Lower Skeena River,,1,0,0.09,
 1017907975,FRASER,SETN,Seton Lake,,3,0,0.09,
 1012401307,SKEENA,LSKE,Lower Skeena River,,1,0,0.09,
+1024742380,SKEENA,LSKE,Lower Skeena River,,1,0,0.09,
 1005406266,FRASER,FRAN,Francois Lake,,1,1,0.08,
 1022202050,FRASER,UFRA,Upper Fraser River,,2,0,0.08,
 1020506026,FRASER,THOM,Thompson River,,2,0,0.06,
-1012601250,FRASER,LTRE,Lower Trembleur Lake,,1,2,0.05,
-1008501811,SKEENA,KITR,Kitimat River,,1,1,0.05,
-1012401322,SKEENA,LSKE,Lower Skeena River,,1,0,0.05,
 1012401297,SKEENA,LSKE,Lower Skeena River,,1,0,0.05,
+1012401322,SKEENA,LSKE,Lower Skeena River,,1,0,0.05,
 1005505709,FRASER,FRCN,Fraser Canyon,Mary Ann Creek,1,0,0.05,
-1012401333,SKEENA,LSKE,Lower Skeena River,,1,0,0.03,
+1008501811,SKEENA,KITR,Kitimat River,,1,1,0.05,
+1012601250,FRASER,LTRE,Lower Trembleur Lake,,1,2,0.05,
 1013905519,FRASER,MORK,Morkill River,,1,0,0.03,
+1012401333,SKEENA,LSKE,Lower Skeena River,,1,0,0.03,
+1012401335,SKEENA,LSKE,Lower Skeena River,,1,0,0.02,
 1020506628,FRASER,THOM,Thompson River,Barnes Creek,1,3,0.02,
 1023204166,FRASER,UNTH,Upper North Thompson River,,2,0,0.02,
-1012401335,SKEENA,LSKE,Lower Skeena River,,1,0,0.02,
 1010305125,FRASER,LFRA,Lower Fraser,,9,0,0.01,
 1009904765,FRASER,LCHL,Lower Chilako River,Hutchison Creek,0,0,8.04,8.04
 1019500445,SKEENA,SUST,Sustut River,Minaret Creek,0,0,7.07,7.07
@@ -197,8 +199,8 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1001805474,SKEENA,BULK,Bulkley River,,0,0,2.18,2.18
 1008802602,SKEENA,KLUM,Kalum River,,0,0,2.01,2.01
 197938,SKEENA,BULK,Bulkley River,Bulkley River,0,9,26.65,1.99
-1024708246,FRASER,HARR,Harrison River,Wades Creek,0,0,1.75,1.75
 1024702261,SKEENA,LSKE,Lower Skeena River,,0,0,1.75,1.75
+1024708246,FRASER,HARR,Harrison River,Wades Creek,0,0,1.75,1.75
 1018303506,FRASER,SHUL,Shuswap Lake,Victor Creek,0,0,1.70,1.70
 1010305083,FRASER,LFRA,Lower Fraser,,0,10,11.21,1.53
 1002801601,FRASER,CHWK,Chilliwack River,Dunville Creek,0,8,7.99,1.38
@@ -228,8 +230,8 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1024715909,FRASER,MORK,Morkill River,,0,0,0.72,0.72
 1006303961,FRASER,HARR,Harrison River,,0,0,0.71,0.71
 1018303471,FRASER,SHUL,Shuswap Lake,,0,0,0.71,0.71
-1023204274,FRASER,UNTH,Upper North Thompson River,McDougal Creek,0,0,0.68,0.68
 1023204273,FRASER,UNTH,Upper North Thompson River,,0,0,0.68,0.68
+1023204274,FRASER,UNTH,Upper North Thompson River,McDougal Creek,0,0,0.68,0.68
 1001805480,SKEENA,BULK,Bulkley River,,0,0,0.65,0.65
 1001805562,SKEENA,BULK,Bulkley River,,0,0,0.63,0.63
 1019500427,SKEENA,SUST,Sustut River,,0,1,2.25,0.62
@@ -277,9 +279,9 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1010304991,FRASER,LFRA,Lower Fraser,Cranberry Slough,0,5,8.12,0.24
 1005505760,FRASER,FRCN,Fraser Canyon,,0,1,1.25,0.24
 1019500428,SKEENA,SUST,Sustut River,,0,0,0.24,0.24
-1010305104,FRASER,LFRA,Lower Fraser,,0,0,0.23,0.23
 1001805564,SKEENA,BULK,Bulkley River,,0,0,0.23,0.23
 1006303946,FRASER,HARR,Harrison River,,0,0,0.23,0.23
+1010305104,FRASER,LFRA,Lower Fraser,,0,0,0.23,0.23
 1001805591,SKEENA,BULK,Bulkley River,McInnes Creek,0,2,0.68,0.22
 1010305019,FRASER,LFRA,Lower Fraser,Windebank Creek,0,8,2.86,0.21
 1011508288,FRASER,LNTH,Lower North Thompson River,,0,0,0.21,0.21
@@ -293,8 +295,8 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1013905592,FRASER,MORK,Morkill River,,0,1,1.31,0.16
 1010305216,FRASER,LFRA,Lower Fraser,,0,1,0.40,0.16
 1010305018,FRASER,LFRA,Lower Fraser,,0,0,0.16,0.16
-1001805504,SKEENA,BULK,Bulkley River,Atrill Creek,0,0,0.14,0.14
 1013905507,FRASER,MORK,Morkill River,,0,0,0.14,0.14
+1001805504,SKEENA,BULK,Bulkley River,Atrill Creek,0,0,0.14,0.14
 1012401296,SKEENA,LSKE,Lower Skeena River,,0,3,1.58,0.13
 51972,FRASER,LFRA,Lower Fraser,,0,2,0.15,0.13
 1005505761,FRASER,FRCN,Fraser Canyon,Keikum Creek,0,0,0.13,0.13
@@ -310,8 +312,8 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1008802600,SKEENA,KLUM,Kalum River,,0,1,1.34,0.08
 1012401274,SKEENA,LSKE,Lower Skeena River,,0,2,0.70,0.08
 1006303981,FRASER,HARR,Harrison River,,0,5,0.68,0.08
-1024713361,FRASER,LILL,Lillooet,Spetch Creek,0,0,0.08,0.08
 1013905415,FRASER,MORK,Morkill River,,0,0,0.08,0.08
+1024713361,FRASER,LILL,Lillooet,Spetch Creek,0,0,0.08,0.08
 1005406263,FRASER,FRAN,Francois Lake,Cheskwa Creek,0,7,6.51,0.07
 1014904183,FRASER,NARC,Narcosli Creek,South Sisters Creek,0,5,4.59,0.07
 1023204250,FRASER,UNTH,Upper North Thompson River,Sager Creek,0,1,1.27,0.07
@@ -340,19 +342,19 @@ aggregated_crossings_id,basin,watershed_group_code,watershed_group_name,gnis_str
 1019106912,FRASER,STHM,South Thompson River,Laveau Creek,0,2,0.77,0.03
 1023204247,FRASER,UNTH,Upper North Thompson River,,0,0,0.03,0.03
 1006304000,FRASER,HARR,Harrison River,,0,0,0.03,0.03
+1024710157,SKEENA,KLUM,Kalum River,,0,0,0.03,0.03
 1001805535,SKEENA,BULK,Bulkley River,,0,0,0.03,0.03
 1006303967,FRASER,HARR,Harrison River,Pye Creek,0,0,0.03,0.03
 1022202086,FRASER,UFRA,Upper Fraser River,,0,0,0.03,0.03
 1005505763,FRASER,FRCN,Fraser Canyon,,0,0,0.03,0.03
-1024710157,SKEENA,KLUM,Kalum River,,0,0,0.03,0.03
 1005505902,FRASER,FRCN,Fraser Canyon,Skwawolt Creek,0,1,3.97,0.02
 1012401290,SKEENA,LSKE,Lower Skeena River,,0,2,2.41,0.02
 1010305064,FRASER,LFRA,Lower Fraser,,0,1,1.42,0.02
 1006303996,FRASER,HARR,Harrison River,,0,2,0.17,0.02
-1010305129,FRASER,LFRA,Lower Fraser,,0,0,0.02,0.02
-1006303971,FRASER,HARR,Harrison River,,0,0,0.02,0.02
 1006304005,FRASER,HARR,Harrison River,,0,0,0.02,0.02
+1006303971,FRASER,HARR,Harrison River,,0,0,0.02,0.02
 1014904185,FRASER,NARC,Narcosli Creek,Sisters Creek,0,0,0.02,0.02
+1010305129,FRASER,LFRA,Lower Fraser,,0,0,0.02,0.02
 1012401266,SKEENA,LSKE,Lower Skeena River,,0,1,0.81,0.01
 1006303945,FRASER,HARR,Harrison River,,0,2,0.53,0.01
 1012401286,SKEENA,LSKE,Lower Skeena River,,0,1,0.44,0.01

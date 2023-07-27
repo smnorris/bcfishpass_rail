@@ -34,6 +34,6 @@ See generated reports as csv in `/output`
 
 ## Archive data
 
-So we have something to refer back to, dump the `bcfishpass` schema to file:
+So we have something to refer back to, dump most of the database to file:
 
-    pg_dump -Fc $DATABASE_URL -n bcfishpas > bcfishpass.dump
+    pg_dump -Fc $DATABASE_URL -T whse_basemapping.fwa* -T whse_basemapping.trim -N bcfishpass_ccira -N psf -N usgs -N whse_admin_boundaries -N whse_cadastre -N whse_forest_vegetation -N whse_legal_admin_boundaries > data/bcfishpass_rail_2023-07-26.dump
