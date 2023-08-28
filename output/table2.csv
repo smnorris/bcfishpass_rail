@@ -1,14 +1,14 @@
 species,habitat_total,habitat_potentially_blocked_by_rail,blocked_proportion
-Spawning - Chinook,12440.61,89.79,0.72
-Spawning - Chum,11353.66,405.71,3.57
-Spawning - Coho,19978.21,374.38,1.87
-Spawning - Pink,12594.03,188.73,1.50
+Spawning - Chinook,15061.04,128.57,0.85
+Spawning - Chum,11353.65,405.71,3.57
+Spawning - Coho,16729.87,264.99,1.58
+Spawning - Pink,12619.11,188.73,1.50
 Spawning - Sockeye,1022.19,4.78,0.47
-Spawning - Steelhead,10406.80,99.31,0.95
-Spawning - any/all,22713.05,607.52,2.67
-Rearing - Chinook,13134.93,156.83,1.19
-Rearing - Coho,25419.59,1116.17,4.39
+Spawning - Steelhead,10407.24,99.31,0.95
+Spawning - any/all,22015.42,548.01,2.49
+Rearing - Chinook,15457.05,205.70,1.33
+Rearing - Coho,19662.58,668.52,3.40
 Rearing - Sockeye,9830.45,30.14,0.31
-Rearing - Steelhead,15148.28,449.64,2.97
-Rearing - any/all,38393.09,1238.52,3.23
-Spawning/Rearing - any/all,41532.42,1278.62,3.08
+Rearing - Steelhead,15146.30,449.64,2.97
+Rearing - any/all,34892.07,839.74,2.41
+Spawning/Rearing - any/all,37892.14,882.75,2.33
