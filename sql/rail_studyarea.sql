@@ -4,7 +4,11 @@
 create schema if not exists temp;
 drop table if exists temp.rail_studyarea;
 
-create table temp.rail_studyarea as
+create table temp.rail_studyarea (id serial primary key,
+watershed_group_code text ,
+geom geometry(polygon, 3005));
+
+
 with studyarea as (
   select distinct
     w.watershed_group_code,
@@ -23,8 +27,8 @@ with studyarea as (
     s.st is not null
 )
 
-select 
-  row_number() over() as id,
+insert into temp.rail_studyarea (watershed_group_code, geom)
+select
   watershed_group_code,
   st_subdivide(geom) as geom
 from studyarea;
