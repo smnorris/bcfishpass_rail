@@ -8,19 +8,27 @@ with studyarea as (
   order by watershed_group_code
 ),
 
-totals as (
+totals_pre_adjustment as (
   select
     s.watershed_group_code,
     round((sum(st_length(geom)) filter (where model_spawning_ch is true) / 1000 )::numeric, 2)  ch_spawning_km_total,
-    round((sum(st_length(geom)) filter (where model_rearing_ch is true) / 1000 )::numeric, 2) ch_rearing_km_total,
     round((sum(st_length(geom)) filter (where model_spawning_cm is true) / 1000)::numeric, 2)  cm_spawning_km_total,
     round((sum(st_length(geom)) filter (where model_spawning_co is true) / 1000)::numeric, 2)  co_spawning_km_total,
-    round((sum(st_length(geom)) filter (where model_rearing_co is true) / 1000)::numeric, 2) co_rearing_km_total,
     round((sum(st_length(geom)) filter (where model_spawning_pk is true) / 1000)::numeric, 2)  pk_spawning_km_total,
     round((sum(st_length(geom)) filter (where model_spawning_sk is true) / 1000)::numeric, 2)  sk_spawning_km_total,
-    round((sum(st_length(geom)) filter (where model_rearing_sk is true) / 1000)::numeric, 2) sk_rearing_km_total,
     round((sum(st_length(geom)) filter (where model_spawning_st is true) / 1000)::numeric, 2)  st_spawning_km_total,
-    round((sum(st_length(geom)) filter (where model_rearing_st is true) / 1000)::numeric, 2) st_rearing_km_total, 
+
+    round((sum(st_length(geom)) filter (where model_rearing_ch is true) / 1000 )::numeric, 2) ch_rearing_km_total,
+    round((sum(st_length(geom)) filter (where model_rearing_co is true) / 1000)::numeric, 2) co_rearing,
+    round((sum(st_length(geom) * .5) filter (where model_rearing_co is true and edge_type = 1050) / 1000)::numeric, 2) co_rearing_addition,
+    (round((sum(st_length(geom)) filter (where model_rearing_co is true) / 1000)::numeric, 2) + round((sum(st_length(geom) * .5) filter (where model_rearing_co is true and edge_type = 1050) / 1000)::numeric, 2)) as co_rearing_km_total,
+
+
+    round((sum(st_length(geom)) filter (where model_rearing_sk is true) / 1000)::numeric, 2) sk_rearing,
+    round((sum(st_length(geom) * .5) filter (where model_rearing_sk is true) / 1000)::numeric, 2) sk_rearing_addition,
+    (round((sum(st_length(geom)) filter (where model_rearing_sk is true) / 1000)::numeric, 2) + round((sum(st_length(geom) * .5) filter (where model_rearing_sk is true) / 1000)::numeric, 2)) as sk_rearing_km_total,
+    round((sum(st_length(geom)) filter (where model_rearing_st is true) / 1000)::numeric, 2) st_rearing_km_total,
+
     round((sum(st_length(geom)) filter (where
        model_spawning_ch is true or
        model_spawning_cm is true or
@@ -29,12 +37,14 @@ totals as (
        model_spawning_sk is true or
        model_spawning_st is true
     ) / 1000)::numeric, 2) all_spawning_km_total,
+
     round((sum(st_length(geom)) filter (where
        model_rearing_ch is true or
        model_rearing_co is true or
        model_rearing_sk is true or
        model_rearing_st is true
-    ) / 1000)::numeric, 2) all_rearing_km_total,
+    ) / 1000)::numeric, 2)  all_rearing_km_total,
+
     round((sum(st_length(geom)) filter (where
        model_spawning_ch is true or
        model_rearing_ch is true or
@@ -45,12 +55,32 @@ totals as (
        model_spawning_sk is true or
        model_rearing_sk is true or
        model_spawning_st is true or
-       model_rearing_st is true 
+       model_rearing_st is true
     ) / 1000)::numeric, 2) all_spawningrearing_km_total
   from bcfishpass.streams s
   inner join studyarea sa
   on s.watershed_group_code = sa.watershed_group_code
   group by s.watershed_group_code),
+
+totals as (
+select
+  watershed_group_code,
+      ch_spawning_km_total,
+      cm_spawning_km_total,
+      co_spawning_km_total,
+      pk_spawning_km_total,
+      sk_spawning_km_total,
+      st_spawning_km_total,
+    ch_rearing_km_total,
+    co_rearing_km_total,
+    sk_rearing_km_total,
+    st_rearing_km_total,
+    all_spawning_km_total,
+    all_rearing_km_total + coalesce(co_rearing_addition, 0) + coalesce(sk_rearing_addition, 0) as all_rearing_km_total,
+    all_spawningrearing_km_total + coalesce(co_rearing_addition, 0) + coalesce(sk_rearing_addition, 0) as all_spawningrearing_km_total
+    from totals_pre_adjustment
+
+),
 
 rail_barriers as
 (

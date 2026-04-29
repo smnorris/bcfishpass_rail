@@ -1,6 +1,6 @@
 metric,non_rail_barriers_dnstr,non_rail_barriers_upstr,all_spawningrearing_km,spawningrearing_upstr_tonextbarrier
-avg,0.93,2.76,2.95,0.72
+avg,0.93,2.76,2.96,0.73
 max,9,48,54.97,8.04
 min,0,0,0.01,0
-median,0,1,1.06,0.245
-total,277,824,882.86,126.01
+median,0,1,1.085,0.25
+total,277,823,882.42,126

@@ -23,7 +23,22 @@ Report on modelled impacts of railways to habitat connectivity for Pacific Salmo
         rm .make/crossing_stats
         make .make/crossing_stats --debug=basic
 
-
+        # fix error in CM spawning habitat
+        psql -c "update bcfishpass.streams set model_spawning_cm = False where blue_line_key = 360846255;
+        
+        update bcfishpass.crossings set cm_spawning_km = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.crossings set cm_spawning_belowupstrbarriers_km = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.crossings set all_spawning_km = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.crossings set all_spawning_belowupstrbarriers_km = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.crossings set all_spawningrearing_km = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.crossings set all_spawningrearing_belowupstrbarriers_km = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.crossings set all_spawningrearing_per_barrier = 0 where aggregated_crossings_id = '1012401286';
+        update bcfishpass.barriers_anthropogenic set cm_spawning_km = 0 where barriers_anthropogenic_id = '1012401286';
+        update bcfishpass.barriers_anthropogenic set cm_spawning_belowupstrbarriers_km = 0 where barriers_anthropogenic_id = '1012401286';
+        update bcfishpass.barriers_anthropogenic set all_spawning_km = 0 where barriers_anthropogenic_id = '1012401286';
+        update bcfishpass.barriers_anthropogenic set all_spawning_belowupstrbarriers_km = 0 where barriers_anthropogenic_id = '1012401286';
+        update bcfishpass.barriers_anthropogenic set all_spawningrearing_km = 0 where barriers_anthropogenic_id = '1012401286';
+        update bcfishpass.barriers_anthropogenic set all_spawningrearing_belowupstrbarriers_km = 0 where barriers_anthropogenic_id = '1012401286';"
 
 ## Run the reporting
 
